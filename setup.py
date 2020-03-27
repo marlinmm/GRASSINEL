@@ -10,12 +10,12 @@ else:
     with open(os.path.join(directory, 'README.md')) as f:
         long_description = f.read()
 
-setup(name='BanDiTS',
+setup(name='GEO450_GRASS_S1',
       packages=find_packages(),
       include_package_data=True,
       setup_requires=['setuptools_scm'],
       use_scm_version=True,
-      description='A Python module for time series analysis',
+      description='....', # missing
       classifiers=[
           'License :: OSI Approved :: MIT License',
           'Operating System :: Microsoft :: Windows',
