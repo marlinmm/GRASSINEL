@@ -3,7 +3,7 @@ import sys
 
 ##################################################################################
 # general GRASS setup
-grassbin = 'grass78'
+grassbin = 'grass79'
 os.environ['GRASSBIN'] = grassbin
 
 from grass_session import Session, get_grass_gisbase
