@@ -1,5 +1,8 @@
 import os
 import sys
+os.environ["GISBASE"] = "/usr/lib/grass79/"
+sys.path.append(os.path.join(os.environ['GISBASE'], 'etc', 'python'))
+sys.path.insert(0, os.path.join(os.environ['GISBASE'], 'etc', 'python'))
 
 ##################################################################################
 # general GRASS setup
