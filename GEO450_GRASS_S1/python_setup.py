@@ -44,17 +44,17 @@ def create_GRASS_GIS_location():
     ##################################################################################
     # user-defined settings
     ### Linux path <- add path here for each Linux user and do not overwrite!
-    # gisdb = '/home/user/grassdata'
+    gisdb = '/home/user/grassdata'
 
     ### Windows path <- add path here for each Windows user and do not overwrite!
-    gisdb = 'F:/GEO450_GRASS/test_python'
-    location = 'test4'
+    # gisdb = 'F:/GEO450_GRASS/test_python'
+    location = 'test3'
     mapset = 'PERMANENT'
     ##################################################################################
     # open a GRASS session and create the mapset if it does not yet exist
     with Session(gisdb=gisdb,
                  location=location,
-                 mapset=mapset,
+                 # mapset=mapset,
                  create_opts='EPSG:32632') as session:
         pass
     ##################################################################################
