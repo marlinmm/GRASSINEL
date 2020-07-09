@@ -50,7 +50,7 @@ mapset = 'PERMANENT'
 # open a GRASS session and create the mapset if it does not yet exist
 with Session(gisdb=gisdb,
              location=location,
-             mapset="user4",
+             mapset=mapset,
              create_opts='EPSG:25832') as session:
     pass
 ##################################################################################
