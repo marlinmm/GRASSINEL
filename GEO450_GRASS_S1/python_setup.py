@@ -40,17 +40,17 @@ import grass.script.setup as gsetup
 ##################################################################################
 # user-defined settings
 ### Linux path <- add path here for each Linux user and do not overwrite!
-#gisdb = '/home/user/grassdata'
+gisdb = '/home/user/grassdata'
 
 ### Windows path <- add path here for each Windows user and do not overwrite!
-gisdb = 'F:/GEO450_GRASS/test_python'
-location = 'test3'
+# gisdb = 'F:/GEO450_GRASS/test_python'
+location = 'test4'
 mapset = 'PERMANENT'
 ##################################################################################
 # open a GRASS session and create the mapset if it does not yet exist
 with Session(gisdb=gisdb,
              location=location,
-             mapset="user4",
+             mapset=mapset,
              create_opts='EPSG:25832') as session:
     pass
 ##################################################################################
