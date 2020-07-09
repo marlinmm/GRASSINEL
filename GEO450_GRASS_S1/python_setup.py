@@ -1,12 +1,13 @@
 import os
 import sys
-os.environ["GISBASE"] = "/usr/lib/grass79/"
-sys.path.append(os.path.join(os.environ['GISBASE'], 'etc', 'python'))
-sys.path.insert(0, os.path.join(os.environ['GISBASE'], 'etc', 'python'))
+# os.environ["GISBASE"] = "/usr/lib/grass79/" # Linux
+# os.environ["GISBASE"] = "C:/OSGeo4W64/apps/grass/grass79/" # Windows
+# sys.path.append(os.path.join(os.environ['GISBASE'], 'etc', 'python'))
+# sys.path.insert(0, os.path.join(os.environ['GISBASE'], 'etc', 'python'))
 
 ##################################################################################
 # general GRASS setup
-grassbin = 'grass79'
+grassbin = r'C:/OSGeo4W64/bin/grass79.bat'
 os.environ['GRASSBIN'] = grassbin
 
 from grass_session import Session, get_grass_gisbase
@@ -19,21 +20,22 @@ sys.path.append(os.path.join(os.environ['GISBASE'], 'lib'))
 sys.path.append(os.path.join(os.environ['GISBASE'], 'scripts'))
 sys.path.append(os.path.join(os.environ['GISBASE'], 'etc', 'python'))
 
-os.environ['PROJ_LIB'] = 'C:\\OSGeo4W64\\share\\proj'
+os.environ['PROJ_LIB'] = "C:/OSGeo4W64/share/proj"
 
 import grass.script as gscript
 import grass.script.setup as gsetup
 
 ##################################################################################
 # user-defined settings
-gisdb = 'E:\\DATA\\test\\GRASS'
-location = 'Spain_Donana'
-mapset = 'PERMANENT'
+gisdb = 'F:/GEO450_GRASS/test_python/'
+location = 'test_1'
+mapset = 'user1'
 ##################################################################################
 # open a GRASS session and create the mapset if it does not yet exist
 with Session(gisdb=gisdb,
              location=location,
-             create_opts='EPSG:32629') as session:
+             mapset=mapset,
+             create_opts='EPSG:25832') as session:
     pass
 ##################################################################################
 # launch session
