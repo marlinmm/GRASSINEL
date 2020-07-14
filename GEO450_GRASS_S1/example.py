@@ -25,26 +25,29 @@ from grass.pygrass.modules.shortcuts import display as d
 # Windows path
 # gisdb = 'F:/GEO450_GRASS/test_python'
 # Linux path
-gisdb = '/home/user/grassdata'
-location = 'test3'
-mapset = 'PERMANENT'
+def new_grasssession():
+    gisdb = '/home/user/grassdata'
+    location = 'test3'
+    mapset = 'PERMANENT'
 
 ## IMPORT AND INSTALL SENTINELSAT FIRST !!! ##
 
 # set some common environmental variables, like for raster compression settings:
 with Session(gisdb=gisdb, location=location, create_opts='EPSG:32632'):
-    #def ogrimport():
+
     ## function body to be added here ##
 
 
     #### RUN THIS SHIT BEFORE RUNNING SENTINELDOWNLOAD!!!!!!
-    # ogrimport = Module("v.in.ogr")
-    # ogrimport("/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_boundary.gpkg")
+    def ogrimport():
+        ogrimport = Module("v.in.ogr")
+        ogrimport("/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_boundary.gpkg")
 
     #print(v.info(map='jena_boundary'))
 
-    sentineldownload = Module("i.sentinel.download")
-    sentineldownload(
+    def sentineldownload():
+        sentineldownload = Module("i.sentinel.download")
+        sentineldownload(
                 ### Linux folder ###
                 settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
                 output="/home/user/Desktop/GRASS Jena Workshop/geodata/sentinel/Sentinel_Download",
