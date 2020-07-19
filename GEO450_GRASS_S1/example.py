@@ -21,6 +21,8 @@ from grass.pygrass.modules.shortcuts import temporal as t
 from grass.pygrass.modules.shortcuts import display as d
 
 
+
+
 # simple example for pyGRASS usage: raster processing via modules approach
 # Windows path
 # gisdb = 'F:/GEO450_GRASS/test_python'
