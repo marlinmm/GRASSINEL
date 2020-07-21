@@ -1,10 +1,7 @@
 import os
-from GEO450_GRASS_S1.new_setup import *
-from GEO450_GRASS_S1.python_setup import *
 ######## add user directory ########
 
 main_dir = os.path.abspath("/home/user/Desktop/GEO450_main_dir")
-
 
 ######## create needed directories ########
 
@@ -23,6 +20,3 @@ class Paths(object):
     grass_path = grass_dir
     send_down_path = sen_down_dir
     sen_processed_path = sen_processed_dir
-
-GRASSBIN_import()
-grass_setup(location_name="GEO450_test1", crs=32632, grass_version="grass79")
