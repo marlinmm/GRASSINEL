@@ -3,23 +3,13 @@
 
 import os
 
-from GEO450_GRASS_S1.python_setup import GRASSBIN_import
+from GEO450_GRASS_S1.test_env.python_setup import GRASSBIN_import
 grassbin = GRASSBIN_import()
 os.environ['GRASSBIN'] = grassbin
 
 from grass_session import Session
-import sentinelsat
-from grass.script import core as gcore
-import grass.script as gscript
-import grass.script.setup as gsetup
 # import grass python libraries
 from grass.pygrass.modules import Module
-from grass.pygrass.modules.shortcuts import general as g
-from grass.pygrass.modules.shortcuts import raster as r
-from grass.pygrass.modules.shortcuts import vector as v
-from grass.pygrass.modules.shortcuts import temporal as t
-from grass.pygrass.modules.shortcuts import display as d
-
 
 # simple example for pyGRASS usage: raster processing via modules approach
 # Windows path
