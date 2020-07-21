@@ -1,7 +1,7 @@
 import os
 import sys
 from grass_session import Session, get_grass_gisbase
-from GEO450_GRASS_S1.main_test import Paths
+from GEO450_GRASS_S1.user_data import Paths
 from grass_session import Session
 import sentinelsat
 from grass.script import core as gcore
@@ -14,7 +14,6 @@ from grass.pygrass.modules.shortcuts import raster as r
 from grass.pygrass.modules.shortcuts import vector as v
 from grass.pygrass.modules.shortcuts import temporal as t
 from grass.pygrass.modules.shortcuts import display as d
-from config import Grass
 
 
 def GRASSBIN_import(version):
