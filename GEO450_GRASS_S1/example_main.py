@@ -1,10 +1,10 @@
 from GEO450_GRASS_S1.grass_functionality import *
 
-def main_func_test():
+def main():
     grass_setup()
-    #sen_download()
-    import_shapefile()
+    sen_download()
+    #import_shapefile()
     test()
 
-
-main_func_test()
+if __name__ == "__main__":
+    main()
