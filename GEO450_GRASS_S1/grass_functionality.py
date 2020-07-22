@@ -65,10 +65,10 @@ def grass_setup():
     print(f"Current GRASS GIS 7 environment: {gscript.gisenv()}")
 
 
-def import_shapefile():
-    ogrimport = Module("v.in.ogr", overwrite=True)
-    ogrimport("/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_boundary.gpkg")
-    #ogrimport("/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_rivers.gpkg")
+def import_shapefile(overwrite):
+    ogrimport = Module("v.in.ogr")
+    ogrimport("/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_boundary.gpkg", overwrite=overwrite)
+    #ogrimport("/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_rivers.gpkg", overwrite=overwrite)
 
 
 def test():
