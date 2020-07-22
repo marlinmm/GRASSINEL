@@ -1,6 +1,8 @@
 import sys
 from GEO450_GRASS_S1.user_data import *
 
+from pyroSAR.snap.util import *
+
 from grass_session import Session, get_grass_gisbase
 from grass_session import Session
 import grass.script as gscript
@@ -75,9 +77,9 @@ def test():
     acitve_vector_data_list = []
     show_active_data = Module("g.list")
     show_active_data(type="vector", flags="m")
-    #for elem in
 
-def sen_download():
+
+def sen_download(start_time, end_time, sort_by):
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
         ### Linux folder ###
@@ -89,7 +91,7 @@ def sen_download():
         map="jena_boundary@PERMANENT",
         area_relation="Intersects",
         producttype="GRD",
-        start="2020-06-02",
-        end="2020-06-30",
-        sort="ingestiondate",
+        start=start_time,
+        end=end_time,
+        sort=sort_by,
         order="asc")
