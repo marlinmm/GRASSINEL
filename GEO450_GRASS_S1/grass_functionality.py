@@ -66,8 +66,8 @@ def grass_setup():
 
 
 def import_shapefile():
-    ogrimport = Module("v.in.ogr")
-    #ogrimport("/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_boundary.gpkg")
+    ogrimport = Module("v.in.ogr", overwrite=True)
+    ogrimport("/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_boundary.gpkg")
     #ogrimport("/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_rivers.gpkg")
 
 
