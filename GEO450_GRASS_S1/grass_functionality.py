@@ -1,8 +1,6 @@
 import sys
 from GEO450_GRASS_S1.user_data import *
 
-from pyroSAR.snap.util import *
-
 from grass_session import Session, get_grass_gisbase
 from grass_session import Session
 import grass.script as gscript
@@ -95,3 +93,29 @@ def sen_download(start_time, end_time, sort_by):
         end=end_time,
         sort=sort_by,
         order="asc")
+
+
+def extract_files_to_list(path_to_folder):
+    """
+    finds all .tif-files in the corresponding directory
+    :return:
+    """
+    new_list = []
+
+    for filename in os.listdir(path_to_folder):
+        if filename.endswith(".zip"):
+            new_list.append(os.path.join(path_to_folder, filename))
+        else:
+            continue
+    return new_list
+
+
+def pyroSAR_processing():
+    from pyroSAR.snap.util import geocode, gpt
+    print("fuuuuuuuuuuuuuuuuuuuuuuuuuuuuck")
+    sentinel_file_list = extract_files_to_list(Paths.send_down_path)
+    print(sentinel_file_list)
+    # geocode(infile=sentinel_file_list, outdir=Paths.sen_processed_path, tr=10, t_srs=32632,
+    #         shapefile="/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_rivers.gpkg")
+    geocode(infile="/home/user/Desktop/GEO450_main_dir/sen_down_dir/S1A_IW_GRDH_1SDV_20200604T053411_20200604T053436_032863_03CE73_051B.zip", outdir=Paths.sen_processed_path, tr=10, t_srs=32632,
+            shapefile="/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_rivers.gpkg")
