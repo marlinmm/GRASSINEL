@@ -7,12 +7,12 @@ grass_version = "grass79"
 
 ######## add user directory ########
 main_dir = os.path.abspath("/home/user/Desktop/GEO450_main_dir")
-
+data_dir = os.path.abspath("/media/user/2nd_disk")
 ######## create needed directories ########
 
 grass_dir = os.path.join(main_dir, 'grass_dir')
-sen_down_dir = os.path.join(main_dir, 'sen_down_dir')
-sen_processed_dir = os.path.join(main_dir, 'sen_processed_dir')
+sen_down_dir = os.path.join(data_dir, 'sen_down_dir')
+sen_processed_dir = os.path.join(data_dir, 'sen_processed_dir')
 
 if not os.path.exists(grass_dir):
     os.makedirs(grass_dir)
