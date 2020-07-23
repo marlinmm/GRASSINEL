@@ -121,6 +121,6 @@ def pyroSAR_processing():
     #         shapefile="/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_rivers.gpkg")
 
     # this one works a little bit better but still doesnt finish:
-    geocode(infile="//media/user/2nd_disk/sen_down_dir/S1A_IW_GRDH_1SDV_20200604T053411_20200604T053436_032863_03CE73_051B.zip",
+    geocode(infile="/media/user/2nd_disk/sen_down_dir/S1A_IW_GRDH_1SDV_20200604T053411_20200604T053436_032863_03CE73_051B.zip",
             outdir=Paths.sen_processed_path, tr=10, t_srs=32632, cleanup=False)
 
