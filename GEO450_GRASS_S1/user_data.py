@@ -6,6 +6,7 @@ crs = "32632"
 grass_version = "grass79"
 
 ######## add user directory ########
+boundary_shape = "/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_boundary.gpkg"
 main_dir = os.path.abspath("/home/user/Desktop/GEO450_main_dir")
 data_dir = os.path.abspath("/media/user/2nd_disk")
 ######## create needed directories ########
@@ -32,3 +33,4 @@ class Paths(object):
     grass_path = grass_dir
     send_down_path = sen_down_dir
     sen_processed_path = sen_processed_dir
+    boundary_path = boundary_shape
