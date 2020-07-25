@@ -96,6 +96,26 @@ def sen_download(start_time, end_time, sort_by):
         order="asc")
 
 
+def sen_download_new(start_time, end_time, sort_by, relative_orbit_number):
+    sentineldownload = Module("i.sentinel.download")
+    sentineldownload(
+        ### Linux folder ###
+        settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
+        output=Paths.send_down_path,
+        ### Windows folder ###
+        # settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
+        # output="F:/GEO450_GRASS/Data/sentinel/test_GEO450",
+        map="jena_boundary@PERMANENT",
+        area_relation="Contains",
+        producttype="GRD",
+        start=start_time,
+        end=end_time,
+        sort=sort_by,
+        order="desc",
+        ### added capability for specific "relativeorbitnumber", needs changes to i.sentinel.download.py first!!! ###
+        relativeorbitnumber=relative_orbit_number)
+
+
 def extract_files_to_list(path_to_folder, datatype):
     """
     finds all .tif-files in the corresponding directory
@@ -124,13 +144,17 @@ def import_polygons():
     return shape_list
 
 
-def pyroSAR_processing(target_resolution, target_CRS, terrain_flat_bool, remove_therm_noise_bool):
+def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_bool, remove_therm_noise_bool):
+    from datetime import datetime
     from pyroSAR.snap.util import geocode
 
     sentinel_file_list = extract_files_to_list(Paths.send_down_path, datatype=".zip")
-    for file in sentinel_file_list:
+    for l, file in enumerate(sentinel_file_list):
         geocode(infile=file, outdir=Paths.sen_processed_path, tr=target_resolution, t_srs=target_CRS,
                 terrainFlattening=terrain_flat_bool, removeS1ThermalNoise=remove_therm_noise_bool)
+
+        interval_time = datetime.now()
+        print("file " + str(l+1) + " of " + str(len(sentinel_file_list)+1) + " processed in " + str(interval_time - start_time) + " Hr:min:sec")
     subset_processed_data()
 
 
