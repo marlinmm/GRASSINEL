@@ -65,16 +65,17 @@ def grass_setup():
     print(f"Current GRASS GIS 7 environment: {gscript.gisenv()}")
 
 
-def import_shapefile(overwrite):
+def import_shapefile(path_to_shape, overwrite_bool):
     ogrimport = Module("v.in.ogr")
-    ogrimport("/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_boundary.gpkg", overwrite=overwrite)
-    #ogrimport("/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_rivers.gpkg", overwrite=overwrite)
+    ogrimport(path_to_shape, overwrite=overwrite_bool)
 
 
 def test():
     acitve_vector_data_list = []
-    show_active_data = Module("g.list")
-    show_active_data(type="vector", flags="m")
+    # show_active_data = Module("g.list")
+    # show_active_data(type="vector", flags="m")
+    tmp = extract_files_to_list(Paths.send_down_path, datatype=".tif")
+    print(tmp)
 
 
 def sen_download(start_time, end_time, sort_by):
@@ -87,7 +88,7 @@ def sen_download(start_time, end_time, sort_by):
         # settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
         # output="F:/GEO450_GRASS/Data/sentinel/test_GEO450",
         map="jena_boundary@PERMANENT",
-        area_relation="Intersects",
+        area_relation="Contains",
         producttype="GRD",
         start=start_time,
         end=end_time,
@@ -95,24 +96,62 @@ def sen_download(start_time, end_time, sort_by):
         order="asc")
 
 
-def extract_files_to_list(path_to_folder):
+def extract_files_to_list(path_to_folder, datatype):
     """
     finds all .tif-files in the corresponding directory
     :return:
     """
     new_list = []
     for filename in os.listdir(path_to_folder):
-        if filename.endswith(".zip"):
+        if filename.endswith(datatype):
             new_list.append(os.path.join(path_to_folder, filename))
         else:
             continue
     return new_list
 
 
-def pyroSAR_processing():
+def import_polygons():
+    """
+    imports the 3x3km polygons of the DWD weather stations
+    :return:
+    """
+    import fiona
+    shape_list = []
+    active_shapefile = fiona.open(Paths.boundary_path, "r")
+    for i in range(0,len(list(active_shapefile))):
+        shapes = [feature["geometry"] for feature in active_shapefile]
+        shape_list.append(shapes)
+    return shape_list
+
+
+def pyroSAR_processing(target_resolution, target_CRS, terrain_flat_bool, remove_therm_noise_bool):
     from pyroSAR.snap.util import geocode
-    sentinel_file_list = extract_files_to_list(Paths.send_down_path)
-    print(sentinel_file_list)
+
+    sentinel_file_list = extract_files_to_list(Paths.send_down_path, datatype=".zip")
     for file in sentinel_file_list:
-        geocode(infile=file, outdir=Paths.sen_processed_path, tr=10, t_srs=32632)
+        geocode(infile=file, outdir=Paths.sen_processed_path, tr=target_resolution, t_srs=target_CRS,
+                terrainFlattening=terrain_flat_bool, removeS1ThermalNoise=remove_therm_noise_bool)
+    subset_processed_data()
+
+
+def subset_processed_data():
+    import rasterio as rio
+    import rasterio.mask
+    import numpy as np
+    ### install BanDiTS using: python3.6 -m pip install git+https://github.com/marlinmm/BanDiTS.git ###
+    from BanDiTS.export_arr import functions_out_array
+    processed_file_list = extract_files_to_list(Paths.sen_processed_path, datatype=".tif")
+    shapefile = import_polygons()
+    for k, tifs in enumerate(processed_file_list):
+        src1 = rio.open(processed_file_list[k])
+        out_image1, out_transform1 = rio.mask.mask(src1, [shapefile[0][0]], all_touched=1, crop=True,
+                                                   nodata=np.nan)
+        ras_meta1 = src1.profile
+        ras_meta1.update({"driver": "GTiff",
+                         "height": out_image1.shape[1],
+                         "width": out_image1.shape[2],
+                         "transform": out_transform1,
+                         "nodata": -9999})
+        functions_out_array(outname=processed_file_list[k][:-4] + "_subset.tif", arr=out_image1,
+                            input_file=processed_file_list[k], dtype=np.float32, ras_meta1=ras_meta1)
 
