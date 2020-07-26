@@ -11,7 +11,6 @@ def main():
     create_stc(overwrite_bool=True)
 
 
-
 if __name__ == "__main__":
     start_time = datetime.now()
     main()
