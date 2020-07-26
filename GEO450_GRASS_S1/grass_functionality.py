@@ -164,10 +164,10 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
         interval_time = datetime.now()
         print("file " + str(l+1) + " of " + str(len(sentinel_file_list)+1) + " processed in " + str(interval_time - start_time) + " Hr:min:sec")
     subset_path = subset_processed_data()
-    subset_import(subset_path=subset_path, overwrite=True)
+    subset_import(subset_path=subset_path, overwrite_bool=True)
 
 
-def subset_import(subset_path, overwrite):
+def subset_import(subset_path, overwrite_bool):
     """
 
     :param subset_path:
@@ -184,25 +184,29 @@ def subset_import(subset_path, overwrite):
             memory=300,
             offset=0,
             num_digits=0,
-            overwrite=overwrite)
+            overwrite=overwrite_bool)
 
-def create_stc():
+def create_stc(overwrite_bool):
     """
-    ...
+    creates a space time cube for Sentinel time series analysis purposes
     :return:
     """
     create_stc = Module("t.create")
-    create_stc(
-        ### Linux folder ###
-        settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
-        output=Paths.send_down_path,
-        ### Windows folder ###
-        # settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
-        # output="F:/GEO450_GRASS/Data/sentinel/test_GEO450",
-        map="jena_boundary@PERMANENT",
-        area_relation="Contains",
-        producttype="GRD",
-        start=start_time,
-        end=end_time,
-        sort=sort_by,
-        order="asc")
+    create_stc(overwrite = overwrite_bool,
+                output="stc",
+                type="strds",
+                temporaltype="absolute",
+                semantictype="mean",
+                title="stc",
+                description="stc")
+
+    register_stc = Module("t.register")
+    register_stc(overwrite = overwrite_bool,
+                 input="stc@PERMANENT",
+                 type="raster",
+                 file="/home/user/Desktop/GRASS Jena Workshop/sentinel-timestamps.txt",
+                 separator="pipe")
+
+    info_stc = Module("t.info")
+    info_stc(input="stc@PERMANENT",
+                type="strds")
