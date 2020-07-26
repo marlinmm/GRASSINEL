@@ -15,6 +15,10 @@ from grass.pygrass.modules.shortcuts import display as d
 
 
 def GRASSBIN_import():
+    """
+    ...
+    :return:
+    """
     # general GRASS setup
     # input your Windows path
     grass7bin_win = r'C:/OSGeo4W64/bin/grass79.bat'
@@ -33,7 +37,8 @@ def GRASSBIN_import():
 
 def grass_setup():
     """
-    ....
+    ...
+    :return:
     """
 
     location_name = GRASS_data.location_name
@@ -66,6 +71,12 @@ def grass_setup():
 
 
 def import_shapefile(path_to_shape, overwrite_bool):
+    """
+
+    :param path_to_shape:
+    :param overwrite_bool:
+    :return:
+    """
     ogrimport = Module("v.in.ogr")
     ogrimport(path_to_shape, overwrite=overwrite_bool)
 
@@ -79,6 +90,13 @@ def test():
 
 
 def sen_download(start_time, end_time, sort_by):
+    """
+    ...
+    :param start_time:
+    :param end_time:
+    :param sort_by:
+    :return:
+    """
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
         ### Linux folder ###
@@ -97,6 +115,14 @@ def sen_download(start_time, end_time, sort_by):
 
 
 def sen_download_new(start_time, end_time, sort_by, relative_orbit_number):
+    """
+    ...
+    :param start_time:
+    :param end_time:
+    :param sort_by:
+    :param relative_orbit_number:
+    :return:
+    """
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
         ### Linux folder ###
@@ -117,6 +143,15 @@ def sen_download_new(start_time, end_time, sort_by, relative_orbit_number):
 
 
 def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_bool, remove_therm_noise_bool):
+    """
+    ...
+    :param start_time:
+    :param target_resolution:
+    :param target_CRS:
+    :param terrain_flat_bool:
+    :param remove_therm_noise_bool:
+    :return:
+    """
     from datetime import datetime
     from pyroSAR.snap.util import geocode
 

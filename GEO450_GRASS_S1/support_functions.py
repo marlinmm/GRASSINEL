@@ -3,7 +3,9 @@ from GEO450_GRASS_S1.user_data import *
 
 def extract_files_to_list(path_to_folder, datatype):
     """
-    finds all .tif-files in the corresponding directory
+    ...
+    :param path_to_folder:
+    :param datatype:
     :return:
     """
     new_list = []
@@ -17,7 +19,7 @@ def extract_files_to_list(path_to_folder, datatype):
 
 def import_polygons():
     """
-    imports the 3x3km polygons of the DWD weather stations
+    imports ...
     :return:
     """
     import fiona
