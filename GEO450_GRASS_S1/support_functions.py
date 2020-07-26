@@ -44,14 +44,15 @@ def subset_processed_data():
     from BanDiTS.export_arr import functions_out_array
     import shutil
 
-    subset_path = os.path.join(Paths.sen_processed_path, "subset")
+    subset_path = os.path.join(Paths.sen_processed_path, "subset/")
     if os.path.exists(subset_path):
         shutil.rmtree(subset_path)
     os.mkdir(subset_path)
-    print(subset_path)
+    # print(subset_path)
     processed_file_list = extract_files_to_list(Paths.sen_processed_path, datatype=".tif")
     shapefile = import_polygons()
     for k, tifs in enumerate(processed_file_list):
+        # print(processed_file_list[k])
         src1 = rio.open(processed_file_list[k])
         out_image1, out_transform1 = rio.mask.mask(src1, [shapefile[0][0]], all_touched=1, crop=True,
                                                    nodata=np.nan)
@@ -61,6 +62,11 @@ def subset_processed_data():
                          "width": out_image1.shape[2],
                          "transform": out_transform1,
                          "nodata": -9999})
-        tmp1 = len(processed_file_list[k])
-        functions_out_array(outname=subset_path + processed_file_list[k][tmp1-48:tmp1-4] + "_subset.tif", arr=out_image1,
+        tmp1 = processed_file_list[k].index("_dir")
+        tmp2 = len(processed_file_list[k])
+        # print(tmp1)
+        # print(processed_file_list[k][tmp1+5:])
+        print(subset_path + processed_file_list[k][tmp1+5:tmp2-4])
+        functions_out_array(outname=subset_path + processed_file_list[k][tmp1+5:tmp2-4] + "_subset.tif", arr=out_image1,
                             input_file=processed_file_list[k], dtype=np.float32, ras_meta1=ras_meta1)
+    return subset_path
