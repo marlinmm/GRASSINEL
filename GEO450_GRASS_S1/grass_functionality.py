@@ -188,6 +188,7 @@ def subset_import(subset_path, overwrite_bool):
 
 def create_stc(overwrite_bool):
     """
+    TODO: Create function to automatically create sentinel-timestamps.txt file first to execute this function!!!
     creates a space time cube for Sentinel time series analysis purposes
     :return:
     """
