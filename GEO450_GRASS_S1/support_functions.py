@@ -42,6 +42,13 @@ def subset_processed_data():
     import numpy as np
     ### install BanDiTS using: python3.6 -m pip install git+https://github.com/marlinmm/BanDiTS.git ###
     from BanDiTS.export_arr import functions_out_array
+    import shutil
+
+    subset_path = os.path.join(Paths.sen_processed_path, "subset")
+    if os.path.exists(subset_path):
+        shutil.rmtree(subset_path)
+    os.mkdir(subset_path)
+    print(subset_path)
     processed_file_list = extract_files_to_list(Paths.sen_processed_path, datatype=".tif")
     shapefile = import_polygons()
     for k, tifs in enumerate(processed_file_list):
@@ -54,5 +61,6 @@ def subset_processed_data():
                          "width": out_image1.shape[2],
                          "transform": out_transform1,
                          "nodata": -9999})
-        functions_out_array(outname=processed_file_list[k][:-4] + "_subset.tif", arr=out_image1,
+        tmp1 = len(processed_file_list[k])
+        functions_out_array(outname=subset_path + processed_file_list[k][tmp1-48:tmp1-4] + "_subset.tif", arr=out_image1,
                             input_file=processed_file_list[k], dtype=np.float32, ras_meta1=ras_meta1)
