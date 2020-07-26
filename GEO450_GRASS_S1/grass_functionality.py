@@ -186,6 +186,7 @@ def subset_import(subset_path, overwrite_bool):
             num_digits=0,
             overwrite=overwrite_bool)
 
+
 def create_stc(overwrite_bool):
     """
     TODO: Create function to automatically create sentinel-timestamps.txt file first to execute this function!!!
