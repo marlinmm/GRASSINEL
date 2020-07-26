@@ -1,4 +1,5 @@
 import os
+from GEO450_GRASS_S1.user_data import *
 
 def extract_files_to_list(path_to_folder, datatype):
     """
