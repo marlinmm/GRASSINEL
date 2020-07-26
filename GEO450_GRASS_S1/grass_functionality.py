@@ -85,8 +85,9 @@ def test():
     acitve_vector_data_list = []
     # show_active_data = Module("g.list")
     # show_active_data(type="vector", flags="m")
-    tmp = extract_files_to_list(Paths.send_down_path, datatype=".tif")
-    print(tmp)
+    # tmp = extract_files_to_list(Paths.send_down_path, datatype=".tif")
+    # print(tmp)
+    print(len("S1A__IW___D_20200530T052558_VV_NR_Orb_ML_TF_TC_dB.tif"))
 
 
 def sen_download(start_time, end_time, sort_by):
@@ -157,12 +158,14 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
 
     sentinel_file_list = extract_files_to_list(Paths.send_down_path, datatype=".zip")
     for l, file in enumerate(sentinel_file_list):
-        # geocode(infile=file, outdir=Paths.sen_processed_path, tr=target_resolution, t_srs=target_CRS,
-        #        terrainFlattening=terrain_flat_bool, removeS1ThermalNoise=remove_therm_noise_bool)
+        geocode(infile=file, outdir=Paths.sen_processed_path, tr=target_resolution, t_srs=target_CRS,
+               terrainFlattening=terrain_flat_bool, removeS1ThermalNoise=remove_therm_noise_bool)
 
         interval_time = datetime.now()
         print("file " + str(l+1) + " of " + str(len(sentinel_file_list)+1) + " processed in " + str(interval_time - start_time) + " Hr:min:sec")
-    subset_processed_data()
+    subset_path = subset_processed_data()
+    subset_import(subset_path=subset_path, overwrite=True)
+
 
 def subset_import(subset_path, overwrite):
     """
@@ -173,6 +176,7 @@ def subset_import(subset_path, overwrite):
     """
     file_list = extract_files_to_list(path_to_folder=subset_path, datatype=".tif")
     for i, tifs in enumerate(file_list):
+        print(tifs)
         sensubsetlimport = Module("r.in.gdal")
         sensubsetlimport(
             input=tifs,
