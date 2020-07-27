@@ -213,8 +213,6 @@ def create_stc(overwrite_bool):
                 title="stc",
                 description="stc")
 
-
-def other(overwrite_bool):
     register_stc = Module("t.register")
     register_stc(overwrite = overwrite_bool,
                  input="stc@PERMANENT",
