@@ -40,7 +40,6 @@ def grass_setup():
     ...
     :return:
     """
-
     location_name = GRASS_data.location_name
     crs = GRASS_data.crs
 
@@ -167,8 +166,9 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
     subset_import(subset_path=subset_path, overwrite_bool=True)
 
 
-def subset_import(subset_path, filelist_path, overwrite_bool):
+def subset_import(subset_path, filelist_path, overwrite_bool, output, polarization_type):
     """
+    TODO: MAYBE IT MAKES SENSE TO SPLIT THE FUNCTION INTO TWO (180-190 & 192-204)
     imports the subsetted raster files into GRASS GIS, renames it into "rasterfile XX" and writes a text file for
     further processing (especially for the creation of a space time cube (see create_stc function below))
     :param subset_path:
@@ -182,7 +182,7 @@ def subset_import(subset_path, filelist_path, overwrite_bool):
         sensubsetlimport = Module("r.in.gdal")
         sensubsetlimport(
             input=tifs,
-            output="rasterfile" + str(i),
+            output=output + str(i),
             memory=300,
             offset=0,
             num_digits=0,
@@ -191,19 +191,21 @@ def subset_import(subset_path, filelist_path, overwrite_bool):
     with open(filelist_path, "w") as f:
         i = -1
         for item in file_list:
-            string = "__IW___"
-            if item.__contains__(string):
-                print(item.index(string))
-                i = i + 1
-                f.write("rasterfile" + str(i) + "|" + item[item.index(string)+9:item.index(string)+13] + "-" +
-                        item[item.index(string)+13:item.index(string)+15] + "-" +
-                        item[item.index(string)+15:item.index(string)+17] + "|" +
-                        item[item.index(string)+25:item.index(string)+27] + "\n")
+            polarization = polarization_type
+            if item.__contains__(polarization):
+                string = "__IW___"
+                if item.__contains__(string):
+                    # print(item.index(string))
+                    i = i + 1
+                    f.write(output + str(i) + "|" + item[item.index(string)+9:item.index(string)+13] + "-" +
+                            item[item.index(string)+13:item.index(string)+15] + "-" +
+                            item[item.index(string)+15:item.index(string)+17] + "|" +
+                            item[item.index(string)+25:item.index(string)+27] + "\n")
 
 
-def create_stc(overwrite_bool, filelist_path):
+def create_stc(overwrite_bool, filelist_path, output):
     """
-    TODO: VISUALIZE STC VIA GUI ANIMATION TOOL !!!
+    TODO: VISUALIZE STC VIA GUI ANIMATION TOOL WOULD BE NICE!!!
     creates and registers a space time cube for Sentinel time series analysis purposes and shows metadata information
     :param overwrite_bool:
     :param filelist_path:
@@ -211,7 +213,7 @@ def create_stc(overwrite_bool, filelist_path):
     """
     create_stc = Module("t.create")
     create_stc(overwrite = overwrite_bool,
-                output="stc",
+                output=output,
                 type="strds",
                 temporaltype="absolute",
                 semantictype="mean",
@@ -220,11 +222,24 @@ def create_stc(overwrite_bool, filelist_path):
 
     register_stc = Module("t.register")
     register_stc(overwrite = overwrite_bool,
-                 input="stc@PERMANENT",
+                 input=output,
                  type="raster",
                  file=filelist_path,
                  separator="pipe")
 
     info_stc = Module("t.info")
-    info_stc(input="stc@PERMANENT",
+    info_stc(input=output,
                 type="strds")
+
+
+def t_rast_algebra(output):
+    """
+    TODO: NOT WORKING YET! NEEDS TO BE ADAPTED FOR STC CALCULATION!
+    :param output:
+    :return:
+    """
+    raster_algebra = Module ("t.rast.algebra")
+    raster_algebra(expression="output = stcVH - stcVV",
+                    basename=output + str(i),
+                    suffix="num",
+                    nprocs=1)
