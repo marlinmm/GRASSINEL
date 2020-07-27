@@ -167,11 +167,12 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
     subset_import(subset_path=subset_path, overwrite_bool=True)
 
 
-def subset_import(subset_path, overwrite_bool):
+def subset_import(subset_path, filelist_path, overwrite_bool):
     """
     imports the subsetted raster files into GRASS GIS, renames it into "rasterfile XX" and writes a text file for
     further processing (especially for the creation of a space time cube (see create_stc function below))
     :param subset_path:
+    :param filelist_path:
     :param overwrite:
     :return:
     """
@@ -187,21 +188,25 @@ def subset_import(subset_path, overwrite_bool):
             num_digits=0,
             overwrite=overwrite_bool)
 
-    with open("/home/user/Desktop/GRASS Jena Workshop/sentinel-filelist.txt", "w") as f:
+    with open(filelist_path, "w") as f:
         i = -1
         for item in file_list:
             string = "__IW___"
             if item.__contains__(string):
                 print(item.index(string))
                 i = i + 1
-                f.write("rasterfile" + str(i) + "|" + item[58:62] + "-" + item[62:64] + "-" + item[64:66] + "|" + item[74:76] + "\n")
+                f.write("rasterfile" + str(i) + "|" + item[item.index(string)+9:item.index(string)+13] + "-" +
+                        item[item.index(string)+13:item.index(string)+15] + "-" +
+                        item[item.index(string)+15:item.index(string)+17] + "|" +
+                        item[item.index(string)+25:item.index(string)+27] + "\n")
 
 
-
-def create_stc(overwrite_bool):
+def create_stc(overwrite_bool, filelist_path):
     """
     TODO: VISUALIZE STC VIA GUI ANIMATION TOOL !!!
-    creates a space time cube for Sentinel time series analysis purposes
+    creates and registers a space time cube for Sentinel time series analysis purposes and shows metadata information
+    :param overwrite_bool:
+    :param filelist_path:
     :return:
     """
     create_stc = Module("t.create")
@@ -217,7 +222,7 @@ def create_stc(overwrite_bool):
     register_stc(overwrite = overwrite_bool,
                  input="stc@PERMANENT",
                  type="raster",
-                 file="/home/user/Desktop/GRASS Jena Workshop/sentinel-filelist.txt",
+                 file=filelist_path,
                  separator="pipe")
 
     info_stc = Module("t.info")
