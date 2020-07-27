@@ -239,7 +239,7 @@ def t_rast_algebra(output):
     :return:
     """
     raster_algebra = Module ("t.rast.algebra")
-    raster_algebra(expression="output = stcVH - stcVV",
-                    basename=output + str(i),
-                    suffix="num",
-                    nprocs=1)
+    #raster_algebra(expression="output = stcVH - stcVV",
+    #                basename=output + str(i),
+    #                suffix="num",
+    #                nprocs=1)
