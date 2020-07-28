@@ -247,3 +247,18 @@ def t_rast_algebra(basename, expression):
                 basename=basename,
                 suffix="num",
                 nprocs=1)
+
+
+def raster_report(overwrite_bool):
+    """
+    TODO: DOENST WORK YET!
+    :return:
+    """
+    raster_report = Module("r.report")
+    raster_report(overwrite = overwrite_bool,
+            map="product13_0@PERMANENT",
+            units="k",
+            null_value="*",
+            page_length=0,
+            page_width=79,
+            nsteps=255)
