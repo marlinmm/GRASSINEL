@@ -1,11 +1,9 @@
 import sys
 from GEO450_GRASS_S1.support_functions import *
-
 from grass_session import Session, get_grass_gisbase
 from grass_session import Session
 import grass.script as gscript
 import grass.script.setup as gsetup
-
 from grass.pygrass.modules import Module
 
 
@@ -26,7 +24,6 @@ def GRASSBIN_import():
         grass7bin = grass7bin_lin
     elif sys.platform.startswith('win'):
         grass7bin = grass7bin_win
-    print(grass7bin)
     return grass7bin
 
 
@@ -81,7 +78,7 @@ def test():
     # show_active_data(type="vector", flags="m")
     # tmp = extract_files_to_list(Paths.send_down_path, datatype=".tif")
     # print(tmp)
-    print(len("S1A__IW___D_20200530T052558_VV_NR_Orb_ML_TF_TC_dB.tif"))
+    # print(len("S1A__IW___D_20200530T052558_VV_NR_Orb_ML_TF_TC_dB.tif"))
 
 
 def sen_download(start_time, end_time, sort_by):
@@ -153,10 +150,11 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
     sentinel_file_list = extract_files_to_list(Paths.send_down_path, datatype=".zip")
     for l, file in enumerate(sentinel_file_list):
         geocode(infile=file, outdir=Paths.sen_processed_path, tr=target_resolution, t_srs=target_CRS,
-               terrainFlattening=terrain_flat_bool, removeS1ThermalNoise=remove_therm_noise_bool)
+                terrainFlattening=terrain_flat_bool, removeS1ThermalNoise=remove_therm_noise_bool)
 
         interval_time = datetime.now()
-        print("file " + str(l+1) + " of " + str(len(sentinel_file_list)+1) + " processed in " + str(interval_time - start_time) + " Hr:min:sec")
+        print("file " + str(l + 1) + " of " + str(len(sentinel_file_list) + 1) + " processed in " + str(
+            interval_time - start_time) + " Hr:min:sec")
     subset_path = subset_processed_data()
 
 
@@ -171,32 +169,37 @@ def subset_import(subset_path, overwrite_bool, output, polarization_type):
     :param subset_path:
     :return:
     """
-    file_list = extract_files_to_list(path_to_folder=subset_path, datatype=".tif")
-    sub_list = [j for j in file_list if polarization_type in j]
-    filelist_path = os.path.join(Paths.main_path, ("sentinel-filelist" + polarization_type + ".txt"))
-    for i, tifs in enumerate(sub_list):
-        print(tifs)
-        sensubsetlimport = Module("r.in.gdal")
-        sensubsetlimport(input=tifs,
-                         output=output + polarization_type + str(i),
-                         memory=500,
-                         offset=0,
-                         num_digits=0,
-                         overwrite=overwrite_bool)
 
-    with open(filelist_path, "w") as f:
-        i = -1
-        for item in file_list:
-            polarization = polarization_type
-            if item.__contains__(polarization):
-                string = "__IW___"
-                if item.__contains__(string):
-                    # print(item.index(string))
-                    i = i + 1
-                    f.write(output + polarization_type + str(i) + "|" + item[item.index(string)+9:item.index(string)+13] + "-" +
-                            item[item.index(string)+13:item.index(string)+15] + "-" +
-                            item[item.index(string)+15:item.index(string)+17] + "|" +
-                            item[item.index(string)+25:item.index(string)+27] + "\n")
+    for pol in polarization_type:
+        file_list = extract_files_to_list(path_to_folder=subset_path, datatype=".tif")
+        sub_list = [j for j in file_list if pol in j]
+        # file_list = extract_files_to_list(path_to_folder=subset_path, datatype=".tif")
+        # sub_list = [j for j in file_list if polarization_type in j]
+        filelist_path = os.path.join(Paths.main_path, ("sentinel-filelist" + pol + ".txt"))
+        for i, tifs in enumerate(sub_list):
+            print(tifs)
+            sensubsetlimport = Module("r.in.gdal")
+            sensubsetlimport(input=tifs,
+                             output=output + pol + str(i),
+                             memory=500,
+                             offset=0,
+                             num_digits=0,
+                             overwrite=overwrite_bool)
+
+        with open(filelist_path, "w") as f:
+            i = -1
+            for item in file_list:
+                polarization = pol
+                if item.__contains__(pol):
+                    string = "__IW___"
+                    if item.__contains__(string):
+                        # print(item.index(string))
+                        i = i + 1
+                        f.write(output + pol + str(i) + "|" + item[item.index(string) + 9:item.index(
+                            string) + 13] + "-" +
+                                item[item.index(string) + 13:item.index(string) + 15] + "-" +
+                                item[item.index(string) + 15:item.index(string) + 17] + "|" +
+                                item[item.index(string) + 25:item.index(string) + 27] + "\n")
 
 
 def create_stc(overwrite_bool, output, polarization_type):
@@ -208,24 +211,25 @@ def create_stc(overwrite_bool, output, polarization_type):
     :param output:
     :return:
     """
-    create_stc = Module("t.create")
-    create_stc(overwrite=overwrite_bool,
-               output=output + polarization_type,
-               type="strds",
-               temporaltype="absolute",
-               semantictype="mean",
-               title="stc",
-               description="stc")
+    for pol in polarization_type:
+        create_stc = Module("t.create")
+        create_stc(overwrite=overwrite_bool,
+                   output=output + pol,
+                   type="strds",
+                   temporaltype="absolute",
+                   semantictype="mean",
+                   title="stc",
+                   description="stc")
 
-    register_stc = Module("t.register")
-    register_stc(overwrite=overwrite_bool,
-                 input=output + polarization_type,
-                 type="raster",
-                 file=os.path.join(Paths.main_path, ("sentinel-filelist" + polarization_type + ".txt")),
-                 separator="pipe")
+        register_stc = Module("t.register")
+        register_stc(overwrite=overwrite_bool,
+                     input=output + pol,
+                     type="raster",
+                     file=os.path.join(Paths.main_path, ("sentinel-filelist" + pol + ".txt")),
+                     separator="pipe")
 
-    info_stc = Module("t.info")
-    info_stc(input=output + polarization_type, type="strds")
+        info_stc = Module("t.info")
+        info_stc(input=output + pol, type="strds")
 
 
 def t_rast_algebra(basename, expression):
@@ -236,12 +240,12 @@ def t_rast_algebra(basename, expression):
     :param expression:
     :return:
     """
-    raster_algebra = Module ("t.rast.algebra")
+    raster_algebra = Module("t.rast.algebra")
     raster_algebra(flags='sng',
-                expression=expression,
-                basename=basename,
-                suffix="num",
-                nprocs=1)
+                   expression=expression,
+                   basename=basename,
+                   suffix="num",
+                   nprocs=1)
 
 
 def raster_report(overwrite_bool):
@@ -250,10 +254,10 @@ def raster_report(overwrite_bool):
     :return:
     """
     raster_report = Module("r.report")
-    raster_report(overwrite = overwrite_bool,
-            map="product13_0@PERMANENT",
-            units="k",
-            null_value="*",
-            page_length=0,
-            page_width=79,
-            nsteps=255)
+    raster_report(overwrite=overwrite_bool,
+                  map="product13_0@PERMANENT",
+                  units="k",
+                  null_value="*",
+                  page_length=0,
+                  page_width=79,
+                  nsteps=255)
