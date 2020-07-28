@@ -165,33 +165,29 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
     subset_path = subset_processed_data()
 
 
-def subset_import(subset_path, filelist_path, overwrite_bool, output, polarization_type):
+def subset_import(subset_path, overwrite_bool, output, polarization_type):
     """
     TODO: MAYBE IT MAKES SENSE TO SPLIT THE FUNCTION INTO TWO (180-190 & 192-204)
     imports the subsetted raster files into GRASS GIS, renames it into "rasterfile XX" and writes a text file for
     further processing (especially for the creation of a space time cube (see create_stc function below))
+    :param polarization_type:
+    :param output:
+    :param overwrite_bool:
     :param subset_path:
-    :param filelist_path:
-    :param overwrite:
     :return:
     """
     file_list = extract_files_to_list(path_to_folder=subset_path, datatype=".tif")
-    for i, tifs in enumerate(file_list):
+    sub_list = [j for j in file_list if polarization_type in j]
+    filelist_path = os.path.join(Paths.main_path, ("sentinel-filelist" + polarization_type + ".txt"))
+    for i, tifs in enumerate(sub_list):
         print(tifs)
-        if "VV" in tifs:
-            output1 = output + "VV"
-        if "VH" in tifs:
-            output1 = output + "VH"
-
         sensubsetlimport = Module("r.in.gdal")
-        sensubsetlimport(
-            input=tifs,
-            output=output1 + str(i),
-            memory=300,
-            offset=0,
-            num_digits=0,
-            overwrite=overwrite_bool)
-
+        sensubsetlimport(input=tifs,
+                         output=output + polarization_type + str(i),
+                         memory=500,
+                         offset=0,
+                         num_digits=0,
+                         overwrite=overwrite_bool)
 
     with open(filelist_path, "w") as f:
         i = -1
@@ -202,40 +198,39 @@ def subset_import(subset_path, filelist_path, overwrite_bool, output, polarizati
                 if item.__contains__(string):
                     # print(item.index(string))
                     i = i + 1
-                    f.write(output + str(i) + "|" + item[item.index(string)+9:item.index(string)+13] + "-" +
+                    f.write(output + polarization_type + str(i) + "|" + item[item.index(string)+9:item.index(string)+13] + "-" +
                             item[item.index(string)+13:item.index(string)+15] + "-" +
                             item[item.index(string)+15:item.index(string)+17] + "|" +
                             item[item.index(string)+25:item.index(string)+27] + "\n")
 
 
-def create_stc(overwrite_bool, filelist_path, output):
+def create_stc(overwrite_bool, output, polarization_type):
     """
     TODO: VISUALIZE STC VIA GUI ANIMATION TOOL WOULD BE NICE!!!
     creates and registers a space time cube for Sentinel time series analysis purposes and shows metadata information
+    :param polarization_type:
     :param overwrite_bool:
-    :param filelist_path:
     :param output:
     :return:
     """
     create_stc = Module("t.create")
-    create_stc(overwrite = overwrite_bool,
-                output=output,
-                type="strds",
-                temporaltype="absolute",
-                semantictype="mean",
-                title="stc",
-                description="stc")
+    create_stc(overwrite=overwrite_bool,
+               output=output + polarization_type,
+               type="strds",
+               temporaltype="absolute",
+               semantictype="mean",
+               title="stc",
+               description="stc")
 
     register_stc = Module("t.register")
-    register_stc(overwrite = overwrite_bool,
-                 input=output,
+    register_stc(overwrite=overwrite_bool,
+                 input=output + polarization_type,
                  type="raster",
-                 file=filelist_path,
+                 file=os.path.join(Paths.main_path, ("sentinel-filelist" + polarization_type + ".txt")),
                  separator="pipe")
 
     info_stc = Module("t.info")
-    info_stc(input=output,
-                type="strds")
+    info_stc(input=output + polarization_type, type="strds")
 
 
 def t_rast_algebra(basename, expression):
