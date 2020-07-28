@@ -179,14 +179,20 @@ def subset_import(subset_path, filelist_path, overwrite_bool, output, polarizati
     file_list = extract_files_to_list(path_to_folder=subset_path, datatype=".tif")
     for i, tifs in enumerate(file_list):
         print(tifs)
+        if "VV" in tifs:
+            output1 = output + "VV"
+        if "VH" in tifs:
+            output1 = output + "VH"
+
         sensubsetlimport = Module("r.in.gdal")
         sensubsetlimport(
             input=tifs,
-            output=output + str(i),
+            output=output1 + str(i),
             memory=300,
             offset=0,
             num_digits=0,
             overwrite=overwrite_bool)
+
 
     with open(filelist_path, "w") as f:
         i = -1
@@ -209,6 +215,7 @@ def create_stc(overwrite_bool, filelist_path, output):
     creates and registers a space time cube for Sentinel time series analysis purposes and shows metadata information
     :param overwrite_bool:
     :param filelist_path:
+    :param output:
     :return:
     """
     create_stc = Module("t.create")
@@ -239,7 +246,7 @@ def t_rast_algebra(output):
     :return:
     """
     raster_algebra = Module ("t.rast.algebra")
-    #raster_algebra(expression="output = stcVH - stcVV",
+    # raster_algebra(expression="output = stcVH - stcVV",
     #                basename=output + str(i),
     #                suffix="num",
     #                nprocs=1)
