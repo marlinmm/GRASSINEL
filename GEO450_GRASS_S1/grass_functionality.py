@@ -160,7 +160,8 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
 
 def subset_import(subset_path, overwrite_bool, output, polarization_type):
     """
-    TODO: MAYBE IT MAKES SENSE TO SPLIT THE FUNCTION INTO TWO (180-190 & 192-204)
+    TODO: UMKREMPELN VON DER FILE_LIST DAMIT DER DAS NACH TAG UND MONAT CHRONOLOGISCH SORTIERT!!!
+
     imports the subsetted raster files into GRASS GIS, renames it into "rasterfile XX" and writes a text file for
     further processing (especially for the creation of a space time cube (see create_stc function below))
     :param polarization_type:
@@ -173,8 +174,6 @@ def subset_import(subset_path, overwrite_bool, output, polarization_type):
     for pol in polarization_type:
         file_list = extract_files_to_list(path_to_folder=subset_path, datatype=".tif")
         sub_list = [j for j in file_list if pol in j]
-        # file_list = extract_files_to_list(path_to_folder=subset_path, datatype=".tif")
-        # sub_list = [j for j in file_list if polarization_type in j]
         filelist_path = os.path.join(Paths.main_path, ("sentinel-filelist" + pol + ".txt"))
         for i, tifs in enumerate(sub_list):
             print(tifs)
