@@ -163,7 +163,6 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
         interval_time = datetime.now()
         print("file " + str(l+1) + " of " + str(len(sentinel_file_list)+1) + " processed in " + str(interval_time - start_time) + " Hr:min:sec")
     subset_path = subset_processed_data()
-    subset_import(subset_path=subset_path, overwrite_bool=True)
 
 
 def subset_import(subset_path, filelist_path, overwrite_bool, output, polarization_type):
@@ -239,14 +238,17 @@ def create_stc(overwrite_bool, filelist_path, output):
                 type="strds")
 
 
-def t_rast_algebra(output):
+def t_rast_algebra(basename, expression):
     """
-    TODO: NOT WORKING YET! NEEDS TO BE ADAPTED FOR STC CALCULATION!
-    :param output:
+    TODO: NEEDS TO CHANGE BASENAME AND EXPRESSION FOR EVERY SINGLE CALCULATION!!! BECAUSE OVERWRITE IS NOT POSSIBLE!!!
+    calculates user dependent raster functions on the space time cubes
+    :param result_name:
+    :param expression:
     :return:
     """
     raster_algebra = Module ("t.rast.algebra")
-    # raster_algebra(expression="output = stcVH - stcVV",
-    #                basename=output + str(i),
-    #                suffix="num",
-    #                nprocs=1)
+    raster_algebra(flags='sng',
+                expression=expression,
+                basename=basename,
+                suffix="num",
+                nprocs=1)
