@@ -10,8 +10,9 @@ def main():
     # sen_download_new(start_time="2020-05-01", end_time="2020-05-30", sort_by="ingestiondate", relative_orbit_number=168)
     # pyroSAR_processing(start_time=start_time, target_resolution=50, target_CRS=32632, terrain_flat_bool=False, remove_therm_noise_bool=False)
     #subset_import(subset_path="/media/user/2nd_disk/sen_processed_dir/subset",
-    #              filelist_path="/home/user/Desktop/GRASS Jena Workshop/sentinel-filelistVH.txt", overwrite_bool=True, output="rasterVH", polarization_type="VH")
-    create_stc(overwrite_bool=True, filelist_path="/home/user/Desktop/GRASS Jena Workshop/sentinel-filelistVV.txt", output="stcVV")
+    #              filelist_path="/home/user/Desktop/GRASS Jena Workshop/sentinel-filelistVV.txt", overwrite_bool=True, output="rasterVV", polarization_type="VV")
+    create_stc(overwrite_bool=True, filelist_path="/home/user/Desktop/GRASS Jena Workshop/sentinel-filelistVH.txt", output="stcVH")
+    #t_rast_algebra(basename="product1", expression="result1 =(stcVH*stcVV)/stcVH")
 
 
 if __name__ == "__main__":
