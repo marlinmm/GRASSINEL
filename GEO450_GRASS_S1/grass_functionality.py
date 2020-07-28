@@ -7,11 +7,6 @@ import grass.script as gscript
 import grass.script.setup as gsetup
 
 from grass.pygrass.modules import Module
-from grass.pygrass.modules.shortcuts import general as g
-from grass.pygrass.modules.shortcuts import raster as r
-from grass.pygrass.modules.shortcuts import vector as v
-from grass.pygrass.modules.shortcuts import temporal as t
-from grass.pygrass.modules.shortcuts import display as d
 
 
 def GRASSBIN_import():
