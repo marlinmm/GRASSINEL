@@ -197,7 +197,9 @@ def subset_import(subset_path, overwrite_bool, output, polarization_type):
                         f.write(output + pol + str(i) + "|" + item[item.index(string) + 9:item.index(
                             string) + 13] + "-" +
                                 item[item.index(string) + 13:item.index(string) + 15] + "-" +
-                                item[item.index(string) + 15:item.index(string) + 17] + "|" +
+                                item[item.index(string) + 15:item.index(string) + 17] + " " +
+                                item[item.index(string) + 18:item.index(string) + 20] + ":" +
+                                item[item.index(string) + 20:item.index(string) + 22] + "|" +
                                 item[item.index(string) + 25:item.index(string) + 27] + "\n")
 
 
