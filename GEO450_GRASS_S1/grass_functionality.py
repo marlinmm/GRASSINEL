@@ -173,6 +173,13 @@ def subset_import(subset_path, overwrite_bool, output, polarization_type):
 
     for pol in polarization_type:
         file_list = extract_files_to_list(path_to_folder=subset_path, datatype=".tif")
+        string = "IW___"
+        cut_list = []
+        for i in file_list:
+            if i.__contains__(string):
+                cut_list.append(i[i.index(string)+7:])
+        cut_list.sort()
+
         sub_list = [j for j in file_list if pol in j]
         filelist_path = os.path.join(Paths.main_path, ("sentinel-filelist" + pol + ".txt"))
         for i, tifs in enumerate(sub_list):
@@ -187,20 +194,16 @@ def subset_import(subset_path, overwrite_bool, output, polarization_type):
 
         with open(filelist_path, "w") as f:
             i = -1
-            for item in file_list:
+            for item in cut_list:
                 polarization = pol
                 if item.__contains__(pol):
-                    string = "__IW___"
-                    if item.__contains__(string):
-                        # print(item.index(string))
-                        i = i + 1
-                        f.write(output + pol + str(i) + "|" + item[item.index(string) + 9:item.index(
-                            string) + 13] + "-" +
-                                item[item.index(string) + 13:item.index(string) + 15] + "-" +
-                                item[item.index(string) + 15:item.index(string) + 17] + " " +
-                                item[item.index(string) + 18:item.index(string) + 20] + ":" +
-                                item[item.index(string) + 20:item.index(string) + 22] + "|" +
-                                item[item.index(string) + 25:item.index(string) + 27] + "\n")
+                    i = i + 1
+                    f.write(output + pol + str(i) + "|" + item[:4] + "-" +
+                            item[4:6] + "-" +
+                            item[6:8] + " " +
+                            item[9:11] + ":" +
+                            item[11:13] + "|" +
+                            item[16:18] + "\n")
 
 
 def create_stc(overwrite_bool, output, polarization_type):
