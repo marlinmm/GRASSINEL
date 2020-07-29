@@ -283,7 +283,7 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
                 stc_timeline(inputs=(output + pol))
 
 
-def t_rast_algebra(basename, layername,  expression, overwrite_bool):
+def t_rast_algebra(basename, layername, expression, overwrite_bool):
     """
     TODO: add docstring and add r.mapcalc
     :param basename:
@@ -305,6 +305,7 @@ def t_rast_algebra(basename, layername,  expression, overwrite_bool):
     for strds in strds_list:
         if layername in strds:
             t_remove(strds_name=strds)
+
     raster_algebra = Module("t.rast.algebra")
     raster_algebra(flags='sng',
                    expression=layername + expression,
