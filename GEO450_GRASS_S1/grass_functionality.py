@@ -199,18 +199,21 @@ def subset_import(overwrite_bool, output, polarization_type):
                     f.write(output + pol + str(i) + "|" + item[:4] + "-" +
                             item[4:6] + "-" +
                             item[6:8] + " " +
+                            # For minute resolution
                             #item[9:11] + ":" +
                             #item[11:13] +
                             "|" +
                             item[16:18] + "\n")
 
 
-def create_stc(overwrite_bool, output, polarization_type, stc_info, stc_statistics):
+def create_stc(overwrite_bool, output, polarization_type, stc_info_bool, stc_statistics_bool):
     """
     creates and registers a space time cube for Sentinel time series analysis purposes and shows metadata information
-    :param polarization_type:
     :param overwrite_bool:
     :param output:
+    :param polarization_type:
+    :param stc_info_bool:
+    :param stc_statistics_bool:
     :return:
     """
     for pol in polarization_type:
@@ -230,11 +233,11 @@ def create_stc(overwrite_bool, output, polarization_type, stc_info, stc_statisti
                      file=os.path.join(Paths.main_path, ("sentinel-filelist" + pol + ".txt")),
                      separator="pipe")
 
-        if stc_info == True:
+        if stc_info_bool == True:
             info_stc = Module("t.info")
             info_stc(input=output + pol, type="strds")
 
-    if stc_statistics == True:
+    if stc_statistics_bool == True:
         for pol in polarization_type:
             stc_statistics = Module("t.rast.univar")
             stc_statistics(flags='er',
@@ -243,9 +246,17 @@ def create_stc(overwrite_bool, output, polarization_type, stc_info, stc_statisti
                     separator="pipe")
 
 
-def visualize_stc(output, polarization_type, stc_animation, stc_timeline):
+def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bool):
+    """
+    visualizes the input space-time-cubes according to user-dependent purposes
+    :param output:
+    :param polarization_type:
+    :param stc_animation_bool:
+    :param stc_timeline_bool:
+    :return:
+    """
     for pol in polarization_type:
-        if stc_animation == True:
+        if stc_animation_bool == True:
             if len(polarization_type) > 1:
                 stc_animation = Module("g.gui.animation")
                 print("----------------- " + str(polarization_type[0]) + " Time Series Animation" + " -----------------")
@@ -257,7 +268,7 @@ def visualize_stc(output, polarization_type, stc_animation, stc_timeline):
                 print("----------------- " + str(pol) + " Time Series Animation" + " -----------------")
                 stc_animation(strds=output+pol)
 
-        if stc_timeline == True:
+        if stc_timeline_bool == True:
             print("----------------------- " + "Timeline Plot" + " ----------------------")
             if len(polarization_type) > 1:
                 stc_timeline = Module("g.gui.timeline")
