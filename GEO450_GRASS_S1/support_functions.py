@@ -6,7 +6,7 @@ def extract_files_to_list(path_to_folder, datatype):
     """
     function to extract files of given datatype from given directory and return as a list
     :param path_to_folder: string
-        path to folder, where filese are to be extracted from
+        path to folder, where files are to be extracted from
     :param datatype: string
         datatype of files to return from given folder
     :return: new_list: list

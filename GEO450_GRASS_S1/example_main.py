@@ -13,7 +13,6 @@ def main():
     # create_stc(overwrite_bool=True, output="stc", polarization_type=["VH", "VV"])
     # visualize_stc(output="stc", polarization_type=["VV", "VH"], stc_animation_bool=True, stc_timeline_bool=False)
     t_rast_algebra(basename="product", layername="result", expression=" = (stcVH*stcVV)/stcVH", overwrite_bool=True)
-    # test()
 
 
 

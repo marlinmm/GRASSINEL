@@ -63,31 +63,20 @@ def grass_setup():
 
 def import_shapefile(path_to_shape, overwrite_bool):
     """
-
-    :param path_to_shape:
-    :param overwrite_bool:
+    imports the boundary of the area of investigation
+    :param path_to_shape: string
+        Path to folder, where the shapefile is
+    :param overwrite_bool: bool
+        Option of True or False, but True is strongly recommended!
     :return:
     """
     ogrimport = Module("v.in.ogr")
     ogrimport(path_to_shape, overwrite=overwrite_bool)
 
 
-def test():
-    # acitve_vector_data_list = []
-    # show_active_data = Module("g.list")
-    # show_active_data(type="vector", flags="m")
-    # tmp = extract_files_to_list(Paths.send_down_path, datatype=".tif")
-    # print(tmp)
-    # print(len("S1A__IW___D_20200530T052558_VV_NR_Orb_ML_TF_TC_dB.tif"))
-    f=open(os.path.join(Paths.main_path, "t_list_output"))
-    contents = f.readlines()
-    print(contents)
-
-
-
 def sen_download(start_time, end_time, sort_by):
     """
-    ...
+    TODO: ADD DOCSTRINGS!!!
     :param start_time:
     :param end_time:
     :param sort_by:
@@ -112,7 +101,7 @@ def sen_download(start_time, end_time, sort_by):
 
 def sen_download_new(start_time, end_time, sort_by, relative_orbit_number):
     """
-    ...
+    TODO: ADD DOCSTRINGS!!!
     :param start_time:
     :param end_time:
     :param sort_by:
@@ -140,7 +129,9 @@ def sen_download_new(start_time, end_time, sort_by, relative_orbit_number):
 
 def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_bool, remove_therm_noise_bool):
     """
-    ...
+    aims at providing a complete solution for the scalable organization and processing of SAR satellite data
+    Copyright by John Truckenbrodt
+    TODO: ADD DOCSTRINGS!!!
     :param start_time:
     :param target_resolution:
     :param target_CRS:
@@ -166,11 +157,12 @@ def subset_import(overwrite_bool, output, polarization_type):
     """
     imports the subsetted raster files into GRASS GIS, renames it into "rasterfile XX" and writes a text file for
     further processing (especially for the creation of a space time cube (see create_stc function below))
-    :param polarization_type:
-    :param output:
-    :param overwrite_bool:
-    :param subset_path:
-    :return:
+    :param overwrite_bool: bool
+        Option of True or False, but True is strongly recommended!
+    :param output: string
+        Output name for every single rasterfile of the space-time-cube
+    :param polarization_type: list
+        Choice between cross-polarization (VH) and/or co-polarization (VV) -> example: ["VH", "VV"]
     """
 
     for pol in polarization_type:
@@ -213,11 +205,16 @@ def subset_import(overwrite_bool, output, polarization_type):
 def create_stc(overwrite_bool, output, polarization_type, stc_info_bool, stc_statistics_bool):
     """
     creates and registers a space time cube for Sentinel time series analysis purposes and shows metadata information
-    :param overwrite_bool:
-    :param output:
-    :param polarization_type:
-    :param stc_info_bool:
-    :param stc_statistics_bool:
+    :param overwrite_bool: bool
+        Option of True or False, but True is strongly recommended!
+    :param output: string
+        Name of the space-time-cube to create & analyze in GRASS GIS
+    :param polarization_type: list
+        Choice between cross-polarization (VH) and/or co-polarization (VV) -> example: ["VH", "VV"]
+    :param stc_info_bool: bool
+        Option of True or False, returns temporal and spatial informations about the stc
+    :param stc_statistics_bool: bool
+        Option of True or False, returns temporal and spatial statistics about every single raster scene of the stc
     :return:
     """
     for pol in polarization_type:
@@ -253,10 +250,14 @@ def create_stc(overwrite_bool, output, polarization_type, stc_info_bool, stc_sta
 def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bool):
     """
     visualizes the input space-time-cubes according to user-dependent purposes
-    :param output:
-    :param polarization_type:
-    :param stc_animation_bool:
-    :param stc_timeline_bool:
+    :param output: string
+        Name of the space-time-cube to vizualize in GRASS GIS
+    :param polarization_type: list
+        Choice between cross-polarization (VH) and/or co-polarization (VV) -> example: ["VH", "VV"]
+    :param stc_animation_bool: bool
+        Option of True or False, animates temporally the space-time-cube with GRASS Animation Tool
+    :param stc_timeline_bool: bool
+        Option of True or False, returns a timeline plot with all downloaded dates with GRASS Timeline Tool
     :return:
     """
     for pol in polarization_type:
