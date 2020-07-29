@@ -158,7 +158,7 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
     subset_path = subset_processed_data()
 
 
-def subset_import(subset_path, overwrite_bool, output, polarization_type):
+def subset_import(overwrite_bool, output, polarization_type):
     """
     TODO: UMKREMPELN VON DER FILE_LIST DAMIT DER DAS NACH TAG UND MONAT CHRONOLOGISCH SORTIERT!!!
 
@@ -172,7 +172,7 @@ def subset_import(subset_path, overwrite_bool, output, polarization_type):
     """
 
     for pol in polarization_type:
-        file_list = extract_files_to_list(path_to_folder=subset_path, datatype=".tif")
+        file_list = extract_files_to_list(path_to_folder=Paths.subset_path, datatype=".tif")
         string = "IW___"
         cut_list = []
         for i in file_list:
