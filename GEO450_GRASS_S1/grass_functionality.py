@@ -160,8 +160,6 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
 
 def subset_import(overwrite_bool, output, polarization_type):
     """
-    TODO: UMKREMPELN VON DER FILE_LIST DAMIT DER DAS NACH TAG UND MONAT CHRONOLOGISCH SORTIERT!!!
-
     imports the subsetted raster files into GRASS GIS, renames it into "rasterfile XX" and writes a text file for
     further processing (especially for the creation of a space time cube (see create_stc function below))
     :param polarization_type:
@@ -207,9 +205,8 @@ def subset_import(overwrite_bool, output, polarization_type):
                             item[16:18] + "\n")
 
 
-def create_stc(overwrite_bool, output, polarization_type):
+def create_stc(overwrite_bool, output, polarization_type, stc_info, stc_statistics):
     """
-    TODO: VISUALIZE STC VIA GUI ANIMATION TOOL WOULD BE NICE!!!
     creates and registers a space time cube for Sentinel time series analysis purposes and shows metadata information
     :param polarization_type:
     :param overwrite_bool:
@@ -233,14 +230,41 @@ def create_stc(overwrite_bool, output, polarization_type):
                      file=os.path.join(Paths.main_path, ("sentinel-filelist" + pol + ".txt")),
                      separator="pipe")
 
-        info_stc = Module("t.info")
-        info_stc(input=output + pol, type="strds")
+        if stc_info == True:
+            info_stc = Module("t.info")
+            info_stc(input=output + pol, type="strds")
 
-        stc_statistics = Module("t.rast.univar")
-        stc_statistics(flags='er',
+    if stc_statistics == True:
+        for pol in polarization_type:
+            stc_statistics = Module("t.rast.univar")
+            stc_statistics(flags='er',
                     overwrite=True,
                     input=output + pol,
                     separator="pipe")
+
+
+def visualize_stc(output, polarization_type, stc_animation, stc_timeline):
+    for pol in polarization_type:
+        if stc_animation == True:
+            if len(polarization_type) > 1:
+                stc_animation = Module("g.gui.animation")
+                print("----------------- " + str(polarization_type[0]) + " Time Series Animation" + " -----------------")
+                stc_animation(strds=(output + polarization_type[0]))
+                print("----------------- " + str(polarization_type[1]) + " Time Series Animation" + " -----------------")
+                stc_animation(strds=(output + polarization_type[1]))
+            else:
+                stc_animation = Module("g.gui.animation")
+                print("----------------- " + str(pol) + " Time Series Animation" + " -----------------")
+                stc_animation(strds=output+pol)
+
+        if stc_timeline == True:
+            print("----------------------- " + "Timeline Plot" + " ----------------------")
+            if len(polarization_type) > 1:
+                stc_timeline = Module("g.gui.timeline")
+                stc_timeline(inputs=(output + polarization_type[0], output + polarization_type[1]))
+            else:
+                stc_timeline = Module("g.gui.timeline")
+                stc_timeline(inputs=(output + pol))
 
 
 def t_rast_algebra(basename, expression):

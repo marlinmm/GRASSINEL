@@ -10,7 +10,8 @@ def main():
     # sen_download_new(start_time="2020-05-01", end_time="2020-05-30", sort_by="ingestiondate", relative_orbit_number=168)
     # pyroSAR_processing(start_time=start_time, target_resolution=50, target_CRS=32632, terrain_flat_bool=False, remove_therm_noise_bool=False)
     #subset_import(overwrite_bool=True, output="raster", polarization_type=["VH", "VV"])
-    create_stc(overwrite_bool=True, output="stc", polarization_type=["VH", "VV"])
+    #create_stc(overwrite_bool=True, output="stc", polarization_type=["VV", "VH"], stc_info=True, stc_statistics=True)
+    visualize_stc(output="stc", polarization_type=["VV"], stc_animation=True, stc_timeline=True)
     # t_rast_algebra(basename="product2", expression="result2 =(stcVH*stcVV)/stcVH")
 
 
