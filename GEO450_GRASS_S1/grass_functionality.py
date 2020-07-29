@@ -201,8 +201,9 @@ def subset_import(overwrite_bool, output, polarization_type):
                     f.write(output + pol + str(i) + "|" + item[:4] + "-" +
                             item[4:6] + "-" +
                             item[6:8] + " " +
-                            item[9:11] + ":" +
-                            item[11:13] + "|" +
+                            #item[9:11] + ":" +
+                            #item[11:13] +
+                            "|" +
                             item[16:18] + "\n")
 
 
@@ -234,6 +235,12 @@ def create_stc(overwrite_bool, output, polarization_type):
 
         info_stc = Module("t.info")
         info_stc(input=output + pol, type="strds")
+
+        stc_statistics = Module("t.rast.univar")
+        stc_statistics(flags='er',
+                    overwrite=True,
+                    input=output + pol,
+                    separator="pipe")
 
 
 def t_rast_algebra(basename, expression):
