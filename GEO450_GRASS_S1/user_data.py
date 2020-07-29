@@ -14,6 +14,7 @@ data_dir = os.path.abspath("/media/user/2nd_disk")
 grass_dir = os.path.join(main_dir, 'grass_dir')
 sen_down_dir = os.path.join(data_dir, 'sen_down_dir')
 sen_processed_dir = os.path.join(data_dir, 'sen_processed_dir')
+subset_dir = os.path.join(sen_processed_dir, "subset")
 
 if not os.path.exists(grass_dir):
     os.makedirs(grass_dir)
@@ -30,7 +31,9 @@ class GRASS_data(object):
 
 
 class Paths(object):
+    main_path = main_dir
     grass_path = grass_dir
     send_down_path = sen_down_dir
     sen_processed_path = sen_processed_dir
+    subset_path = subset_dir
     boundary_path = boundary_shape
