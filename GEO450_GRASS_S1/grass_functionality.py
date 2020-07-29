@@ -155,7 +155,7 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
         interval_time = datetime.now()
         print("file " + str(l + 1) + " of " + str(len(sentinel_file_list) + 1) + " processed in " + str(
             interval_time - start_time) + " Hr:min:sec")
-    subset_path = subset_processed_data()
+    subset_processed_data()
 
 
 def subset_import(overwrite_bool, output, polarization_type):
