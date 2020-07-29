@@ -285,7 +285,7 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
 
 def t_rast_algebra(basename, layername,  expression, overwrite_bool):
     """
-
+    TODO: add docstring and add r.mapcalc
     :param basename:
     :param layername:
     :param expression:
@@ -311,59 +311,6 @@ def t_rast_algebra(basename, layername,  expression, overwrite_bool):
                    basename=basename,
                    suffix="num",
                    nprocs=1)
-
-
-def t_list_output(overwrite_bool):
-    """
-
-    :param overwrite_bool:
-    :return:
-    """
-    t_list = Module("t.list")
-    t_list(overwrite=overwrite_bool,
-           type="strds",
-           temporaltype="absolute",
-           order="id",
-           columns="id",
-           separator="pipe",
-           output=os.path.join(Paths.main_path, "t_list_output"))
-
-
-def g_list_output(overwrite_bool):
-    """
-
-    :param overwrite_bool:
-    :return:
-    """
-    g_list = Module("g.list")
-    g_list(overwrite=overwrite_bool,
-           type="raster",
-           separator=",",
-           output=os.path.join(Paths.main_path, "g_list_output"))
-
-
-def t_remove(strds_name):
-    """
-
-    :param strds_name:
-    :return:
-    """
-    strds_remove = Module("t.remove")
-    strds_remove(flags='rf',
-                 type="strds",
-                 inputs=strds_name)
-
-
-def g_remove(raster_name):
-    """
-
-    :param raster_name:
-    :return:
-    """
-    raster_remove = Module("g.remove")
-    raster_remove(flags='fb',
-                  type="raster",
-                  name=raster_name + "@PERMANENT")
 
 
 def raster_report(overwrite_bool):
