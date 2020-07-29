@@ -73,12 +73,16 @@ def import_shapefile(path_to_shape, overwrite_bool):
 
 
 def test():
-    acitve_vector_data_list = []
+    # acitve_vector_data_list = []
     # show_active_data = Module("g.list")
     # show_active_data(type="vector", flags="m")
     # tmp = extract_files_to_list(Paths.send_down_path, datatype=".tif")
     # print(tmp)
     # print(len("S1A__IW___D_20200530T052558_VV_NR_Orb_ML_TF_TC_dB.tif"))
+    f=open(os.path.join(Paths.main_path, "t_list_output"))
+    contents = f.readlines()
+    print(contents)
+
 
 
 def sen_download(start_time, end_time, sort_by):
@@ -175,7 +179,7 @@ def subset_import(overwrite_bool, output, polarization_type):
         cut_list = []
         for i in file_list:
             if i.__contains__(string):
-                cut_list.append(i[i.index(string)+7:])
+                cut_list.append(i[i.index(string) + 7:])
         cut_list.sort()
 
         sub_list = [j for j in file_list if pol in j]
@@ -278,20 +282,87 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
                 stc_timeline(inputs=(output + pol))
 
 
-def t_rast_algebra(basename, expression):
+def t_rast_algebra(basename, layername,  expression, overwrite_bool):
     """
-    TODO: NEEDS TO CHANGE BASENAME AND EXPRESSION FOR EVERY SINGLE CALCULATION!!! BECAUSE OVERWRITE IS NOT POSSIBLE!!!
-    calculates user dependent raster functions on the space time cubes
-    :param result_name:
+
+    :param basename:
+    :param layername:
     :param expression:
+    :param overwrite_bool:
     :return:
     """
+    g_list_output(overwrite_bool)
+    t_list_output(overwrite_bool)
+    acive_strds = open(os.path.join(Paths.main_path, "t_list_output"))
+    strds_list = acive_strds.readlines()
+    active_raster = open(os.path.join(Paths.main_path, "g_list_output"))
+    raster = active_raster.read()
+    raster_list = list(raster.split(sep=","))
+    for raster in raster_list:
+        if basename in raster:
+            g_remove(raster_name=raster)
+    for strds in strds_list:
+        if layername in strds:
+            t_remove(strds_name=strds)
     raster_algebra = Module("t.rast.algebra")
     raster_algebra(flags='sng',
-                   expression=expression,
+                   expression=layername + expression,
                    basename=basename,
                    suffix="num",
                    nprocs=1)
+
+
+def t_list_output(overwrite_bool):
+    """
+
+    :param overwrite_bool:
+    :return:
+    """
+    t_list = Module("t.list")
+    t_list(overwrite=overwrite_bool,
+           type="strds",
+           temporaltype="absolute",
+           order="id",
+           columns="id",
+           separator="pipe",
+           output=os.path.join(Paths.main_path, "t_list_output"))
+
+
+def g_list_output(overwrite_bool):
+    """
+
+    :param overwrite_bool:
+    :return:
+    """
+    g_list = Module("g.list")
+    g_list(overwrite=overwrite_bool,
+           type="raster",
+           separator=",",
+           output=os.path.join(Paths.main_path, "g_list_output"))
+
+
+def t_remove(strds_name):
+    """
+
+    :param strds_name:
+    :return:
+    """
+    strds_remove = Module("t.remove")
+    strds_remove(flags='rf',
+                 type="strds",
+                 inputs=strds_name)
+
+
+def g_remove(raster_name):
+    """
+
+    :param raster_name:
+    :return:
+    """
+    raster_remove = Module("g.remove")
+    raster_remove(flags='fb',
+                  type="raster",
+                  name=raster_name + "@PERMANENT")
 
 
 def raster_report(overwrite_bool):
@@ -306,4 +377,4 @@ def raster_report(overwrite_bool):
                   null_value="*",
                   page_length=0,
                   page_width=79,
-                  nsteps=255)
+                  nsteps=10)
