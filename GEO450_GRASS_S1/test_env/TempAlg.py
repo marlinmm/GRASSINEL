@@ -2,25 +2,30 @@ import os
 
 from pywps import Process, LiteralInput, LiteralOutput
 
-__author__ = 'Martin Landa'
+__author__ = 'Jonas Ziemer, Marlin Müller & Patrick Fischer'
 
 
 class TempAlg(Process):
     def __init__(self):
         # inputs (basename, layername und expression)
-        inputs = [LiteralInput('start1', 'Start date (eg. 2019-03-01)',
+        inputs = [LiteralInput('start1', 'Start date (eg. 2020-05-01)',
                                data_type='string'),
-                  LiteralInput('end1', 'End date (eg. 2019-04-01)',
+                  LiteralInput('end1', 'End date (eg. 2020-05-04)',
                                data_type='string'),
-                  LiteralInput('start2', 'Start date (eg. 2019-03-01)',
+                  LiteralInput('start2', 'Start date (eg. 2020-05-01)',
                                data_type='string'),
-                  LiteralInput('end1', 'End date (eg. 2019-04-01)',
+                  LiteralInput('end2', 'End date (eg. 2020-05-04)',
                                data_type='string'),
                   # LiteralInput('expression', 'Expression (eg. bla blubb)', data_type='string')
                   ]
-        outputs = [LiteralOutput('stats', 'Computed LST statistics',
+        outputs = [LiteralOutput('stats1', 'Computed LST statistics',
+                                 data_type='string'),
+                   LiteralOutput('stats2', 'Computed ndvi statistics',
                                  data_type='string')
                    ]
+
+# Link for Execution!
+# http://localhost:5000/wps?request=Execute&service=WPS&identifier=tempalg&version=1.0.0&datainputs=start1=2020-05-01;end1=2020-05-04;start2=2020-05-01;end2=2020-05-04
 
         super(TempAlg, self).__init__(
             self._handler,
@@ -40,8 +45,8 @@ class TempAlg(Process):
         from datetime import datetime
 
         d = datetime.strptime(date_str, '%Y-%m-%d')
-        if d.year != 2019:
-            raise Exception("Only year 2019 allowed")
+        if d.year != 2020:
+            raise Exception("Only year 2020 allowed")
 
     def _handler(self, request, response):
         from subprocess import PIPE
@@ -50,10 +55,15 @@ class TempAlg(Process):
         from grass.pygrass.modules import Module
         from grass.exceptions import CalledModuleError
 
-        start = request.inputs['start'][0].data
-        end = request.inputs['end'][0].data
-        self.check_date(start)
-        self.check_date(end)
+        start1 = request.inputs['start1'][0].data
+        end1 = request.inputs['end1'][0].data
+        self.check_date(start1)
+        self.check_date(end1)
+
+        start2 = request.inputs['start2'][0].data
+        end2 = request.inputs['end2'][0].data
+        self.check_date(start2)
+        self.check_date(end2)
 
         output1 = 'stcVH'
         output2 = 'stcVV'
@@ -67,14 +77,14 @@ class TempAlg(Process):
                    output=output1,
                    method='average',
                    where="start_time > '{start}' and start_time < '{end}'".format(
-                       start=start, end=end
+                       start=start1, end=end1
                    ))
             Module('t.rast.series',
                    input='stcVV@PERMANENT',
                    output=output2,
                    method='average',
                    where="start_time > '{start}' and start_time < '{end}'".format(
-                       start=start, end=end
+                       start=start2, end=end2
                    ))
 
         except CalledModuleError:
@@ -85,11 +95,21 @@ class TempAlg(Process):
                      map=output1,
                      stdout_=PIPE
                      )
-        stats = gs.parse_key_val(ret.outputs.stdout)
+        ret2 = Module('r.univar',
+                      flags='g',
+                      map=output2,
+                      stdout_=PIPE
+                      )
+        stats1 = gs.parse_key_val(ret.outputs.stdout)
+        stats2 = gs.parse_key_val(ret2.outputs.stdout)
 
-        outstr = 'Min: {0:.1f};Max: {1:.1f};Mean: {2:.1f}'.format(
-            float(stats['min']), float(stats['max']), float(stats['mean'])
+        outstr1 = 'Min1: {0:.1f};Max1: {1:.1f};Mean1: {2:.1f}'.format(
+            float(stats1['min']), float(stats1['max']), float(stats1['mean'])
         )
-        response.outputs['stats'].data = outstr
+        outstr2 = 'Min2: {0:.1f};Max2: {1:.1f};Mean2: {2:.1f}'.format(
+            float(stats2['min']), float(stats2['max']), float(stats2['mean'])
+        )
+        response.outputs['stats1'].data = outstr1
+        response.outputs['stats2'].data = outstr2
 
         return response
