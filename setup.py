@@ -22,7 +22,7 @@ setup(name='GEO450_GRASS_S1',
           'Operating System :: POSIX :: Linux',
           'Programming Language :: Python',
       ],
-      install_requires=["pyroSAR"],
+      install_requires=["pyroSAR", "setuptools~=39.0.1", "rasterio", "fiona", "BanDiTS @ git+https://github.com/marlinmm/BanDiTS.git"],
       python_requires='>=3.6.0',
       url='https://github.com/marlinmm/GEO450_GRASS_S1.git',
       author='', #'Jonas Ziemer', Marlin Mueller, Patrick Fischer  # how to add second author?
