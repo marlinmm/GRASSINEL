@@ -15,18 +15,19 @@ setup(name='GEO450_GRASS_S1',
       include_package_data=True,
       setup_requires=['setuptools_scm'],
       use_scm_version=True,
-      description='....', # missing
+      description='Tool for combining pyroSAR S-1 processing capabilities and GRASS GIS functionality',
       classifiers=[
           'License :: OSI Approved :: MIT License',
           'Operating System :: Microsoft :: Windows',
           'Operating System :: POSIX :: Linux',
           'Programming Language :: Python',
       ],
-      install_requires=["pyroSAR", "setuptools~=39.0.1", "rasterio", "fiona", "BanDiTS @ git+https://github.com/marlinmm/BanDiTS.git"],
+      install_requires=["pyroSAR", "setuptools", "rasterio", "fiona",
+                        "BanDiTS @ git+https://github.com/marlinmm/BanDiTS.git"],
       python_requires='>=3.6.0',
       url='https://github.com/marlinmm/GEO450_GRASS_S1.git',
-      author='', #'Jonas Ziemer', Marlin Mueller, Patrick Fischer  # how to add second author?
-      author_email='',
+      author='Marlin M. Mueller',  # 'Jonas Ziemer', Marlin Mueller, Patrick Fischer  # how to add second author?
+      author_email='marlin.markus.mueller@uni-jena.de',
       license='MIT',
       zip_safe=False,
       long_description=long_description,
