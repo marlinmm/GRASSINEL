@@ -1,11 +1,28 @@
-# GEO450_GRASS
+# GEO450_GRASS_S1
 University Project (FSU Jena)
 
-This tool aims to set up a multi-source space-time raster cube for Thuringia using GRASS GIS and further Python libraries. Automated workflows are foreseen including data download, data pre-processing and data processing to set up space-time raster cubes for other regions in the future. Based on Sentinel-1, different tools should enable researchers ans users to conduct time-series analysis. 
+This tool combines [pyroSAR](https://github.com/johntruckenbrodt/pyroSAR) Sentinel-1 preprocessing capabilites with 
+[GRASS GIS](grass.osgeo.org) functionality for Sentinel satellite imagery. 
 
-The following functionalty should be possible with this tool:
-1) Data download based on i.sentinel.download including basic adjustments for Sentinel-1
-2) Development of a SAR pre-processing add-on for GRASS GIS based in SNAP via pyroSAR (author: John Truckenbrodt)
-3) Creation of a Sentinel-1 space-time cube
-4) Analysis: Multitemporal analysis using t.rast.mapcalc or t.rast.algebra
-5) Example PyWPS process to make multitemporal analysis available as web service
+It allows for automatic downloading of user-defined Sentinel-1 scenes, pre-processing, subsetting and multitemporal
+operations. Data is handled in GRASS internal formats and all available GRASS operations can be applied
+
+Functionality Overview:
+* Automatic Setup of GRASS environment
+* Automatic download of Sentinel-1 data using the GRASS addon i.sentinel.download
+* Pre-processing of downloaded Sentinel-1 using pyroSAR functionality ([ESA SNAP](http://step.esa.int/main/download/snap-download/)
+ is required for the processing, see [here](https://pyrosar.readthedocs.io/en/latest/?badge=latest))
+* Automatic subetting of satellite data to specified region of interest
+* GRASS functionalty:
+    * Creation of space time raster datasets (STRDS) in GRASS
+    * Different mutitemporal operations in GRASS
+* Future functionality:
+    * pyWPS implementation
+
+_Developed in Python 3.6, currently only supported on linux-based OS_
+
+# Installation
+In case you have git installed you can install the package as follows:
+
+    pip install git+https://github.com/marlinmm/GEO450_GRASS_S1.git
+
