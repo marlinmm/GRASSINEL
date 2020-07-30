@@ -234,11 +234,11 @@ def create_stc(overwrite_bool, output, polarization_type, stc_info_bool, stc_sta
                      file=os.path.join(Paths.main_path, ("sentinel-filelist" + pol + ".txt")),
                      separator="pipe")
 
-        if stc_info_bool == True:
+        if stc_info_bool:
             info_stc = Module("t.info")
             info_stc(input=output + pol, type="strds")
 
-    if stc_statistics_bool == True:
+    if stc_statistics_bool:
         for pol in polarization_type:
             stc_statistics = Module("t.rast.univar")
             stc_statistics(flags='er',
@@ -261,7 +261,7 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
     :return:
     """
     for pol in polarization_type:
-        if stc_animation_bool == True:
+        if stc_animation_bool:
             if len(polarization_type) > 1:
                 stc_animation = Module("g.gui.animation")
                 print("----------------- " + str(polarization_type[0]) + " Time Series Animation" + " -----------------")
@@ -273,7 +273,7 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
                 print("----------------- " + str(pol) + " Time Series Animation" + " -----------------")
                 stc_animation(strds=output+pol)
 
-        if stc_timeline_bool == True:
+        if stc_timeline_bool:
             print("----------------------- " + "Timeline Plot" + " ----------------------")
             if len(polarization_type) > 1:
                 stc_timeline = Module("g.gui.timeline")
@@ -283,9 +283,9 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
                 stc_timeline(inputs=(output + pol))
 
 
-def t_rast_algebra(basename, layername, expression, overwrite_bool):
+def raster_algebra(basename, layername, expression, overwrite_bool):
     """
-    TODO: add docstring and add r.mapcalc
+    TODO: add docstring and add r.mapcalc NDPI!!!
     :param basename:
     :param layername:
     :param expression:
@@ -311,19 +311,46 @@ def t_rast_algebra(basename, layername, expression, overwrite_bool):
                    expression=layername + expression,
                    basename=basename,
                    suffix="num",
-                   nprocs=1)
+                   nprocs=4)
 
 
-def raster_report(overwrite_bool):
+def rvi_mapcalc(layername, overwrite_bool):
     """
-    TODO: DOENST WORK YET!
+    calculates the radar vegetation index for all file of the space-time-cube
+    :param layername: string
+        Name of the output layer
+    :param overwrite_bool: bool
+        Option of True or False, but True is strongly recommended!
     :return:
     """
-    raster_report = Module("r.report")
-    raster_report(overwrite=overwrite_bool,
-                  map="product13_0@PERMANENT",
-                  units="k",
-                  null_value="*",
-                  page_length=0,
-                  page_width=79,
-                  nsteps=10)
+    VH = open(os.path.join(Paths.main_path, "sentinel-filelistVH.txt"))
+    new_list = VH.readlines()
+    file_VH_list = []
+    file_VV_list = []
+    for ele in new_list:
+        file_VH = ele[:ele.index("|")]
+        file_VH_list.append(file_VH)
+    VV = open(os.path.join(Paths.main_path, "sentinel-filelistVV.txt"))
+    new_list = VV.readlines()
+    print(new_list)
+    for ele in new_list:
+        file_VV = ele[:ele.index("|")]
+        file_VV_list.append(file_VV)
+
+    rvi_list = []
+    for i, rvi in enumerate(file_VH_list):
+        mapcalc_rvi = Module("r.mapcalc")
+        expression = f"= 4*(10^( {file_VH_list[i]} /10))/(10^( {file_VV_list[i]}/10)+10^( {file_VH_list[i]} /10))"
+        mapcalc_rvi(overwrite=overwrite_bool,
+                    expression=layername + str(i) + expression,
+                    region="current")
+        rvi_list.append(layername + str(i))
+
+        print("---------------------------- RVI Info - Layer " + layername + str(i) + " ----------------------------")
+        rvi_info = Module("r.info")
+        rvi_info(map=layername + str(i))
+
+    rvi_visualization = Module("g.gui.animation")
+    rvi_visualization(raster=rvi_list)
+
+

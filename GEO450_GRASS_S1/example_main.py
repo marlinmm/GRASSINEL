@@ -16,11 +16,12 @@ def main():
     # subset_import(overwrite_bool=True, output="raster", polarization_type=["VH", "VV"])
 
     ########## GRASS SPACE TIME CUBE FUNCTION(S) #############
-    # create_stc(overwrite_bool=True, output="stc", polarization_type=["VH", "VV"])
-    # visualize_stc(output="stc", polarization_type=["VV", "VH"], stc_animation_bool=True, stc_timeline_bool=False)
+    # create_stc(overwrite_bool=True, output="stc", polarization_type=["VH", "VV"], stc_info_bool=False, stc_statistics_bool=False)
+    # visualize_stc(output="stc", polarization_type=["VV", "VH"], stc_animation_bool=False, stc_timeline_bool=False)
 
     ########## GRASS ANALYSIS FUNCTION(S) #############
-    t_rast_algebra(basename="product", layername="result", expression=" = (stcVH*stcVV)/stcVH", overwrite_bool=True)
+    #raster_algebra(basename="product", layername="result", expression=" = stcVH*stcVV", overwrite_bool=True)
+    rvi_mapcalc(layername="rvi", overwrite_bool=True)
 
 
 if __name__ == "__main__":
