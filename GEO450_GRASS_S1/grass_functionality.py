@@ -17,11 +17,13 @@ def import_shapefile(path_to_shape, overwrite_bool):
 
 def sen_download(start_time, end_time, sort_by):
     """
-    TODO: ADD DOCSTRINGS!!!
-    :param start_time:
-    :param end_time:
-    :param sort_by:
-    :return:
+        this function takes some parameters and downloads Sentinel-1 data using GRASS functions accordingly
+    :param start_time: string
+        start date for the Sentinel-1 data download search
+    :param end_time: string
+        end date for the Sentinel-1 data download search
+    :param sort_by: string
+        variable to sort Sentinel-1 data by
     """
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
@@ -42,12 +44,19 @@ def sen_download(start_time, end_time, sort_by):
 
 def sen_download_new(start_time, end_time, sort_by, relative_orbit_number):
     """
-    TODO: ADD DOCSTRINGS!!!
-    :param start_time:
-    :param end_time:
-    :param sort_by:
-    :param relative_orbit_number:
-    :return:
+        this function takes some parameters and downloads Sentinel-1 data using GRASS functions accordingly
+
+        !!! this function needs changes to i.sentinel.download first to work, changes are requested to official OSGEO
+        grass-addons repo !!!
+
+    :param start_time: string
+        start date for the Sentinel-1 data download search
+    :param end_time: string
+        end date for the Sentinel-1 data download search
+    :param sort_by: string
+        variable to sort Sentinel-1 data by
+    :param relative_orbit_number: int
+        this variable lets user specifically choose one relative orbit number to always receive the same orbit files
     """
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
