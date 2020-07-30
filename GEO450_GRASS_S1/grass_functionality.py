@@ -1,64 +1,5 @@
-import sys
 from GEO450_GRASS_S1.support_functions import *
-from grass_session import Session, get_grass_gisbase
-from grass_session import Session
-import grass.script as gscript
-import grass.script.setup as gsetup
 from grass.pygrass.modules import Module
-
-
-def GRASSBIN_import():
-    """
-    ...
-    :return:
-    """
-    # general GRASS setup
-    # input your Windows path
-    grass7bin_win = r'C:/OSGeo4W64/bin/grass79.bat'
-    # set your Linux grass version
-    grass7bin_lin = GRASS_data.grass_version
-
-    if sys.platform.startswith('linux'):
-        # we assume that the GRASS GIS start script is available and in the PATH
-        # query GRASS 7 itself for its GISBASE
-        grass7bin = grass7bin_lin
-    elif sys.platform.startswith('win'):
-        grass7bin = grass7bin_win
-    return grass7bin
-
-
-def grass_setup():
-    """
-    ...
-    :return:
-    """
-    location_name = GRASS_data.location_name
-    crs = GRASS_data.crs
-
-    grassbin = GRASSBIN_import()
-    os.environ['GRASSBIN'] = grassbin
-    gisbase = get_grass_gisbase()
-    os.environ['GISBASE'] = gisbase
-    sys.path.append(os.path.join(os.environ['GISBASE'], 'bin'))
-    sys.path.append(os.path.join(os.environ['GISBASE'], 'lib'))
-    sys.path.append(os.path.join(os.environ['GISBASE'], 'scripts'))
-    sys.path.append(os.path.join(os.environ['GISBASE'], 'etc', 'python'))
-
-    # set folder to proj_lib:
-    os.environ['PROJ_LIB'] = '/usr/share/proj'
-
-    gisdb = Paths.grass_path
-    mapset = "PERMANENT"
-    ##################################################################################
-    # open a GRASS session and create the mapset if it does not yet exist
-    with Session(gisdb=gisdb,
-                 location=GRASS_data.location_name,
-                 create_opts='EPSG:' + crs) as session:
-        pass
-    ##################################################################################
-    # launch session
-    gsetup.init(gisbase, gisdb, location_name, mapset)
-    print(f"Current GRASS GIS 7 environment: {gscript.gisenv()}")
 
 
 def import_shapefile(path_to_shape, overwrite_bool):
@@ -125,32 +66,6 @@ def sen_download_new(start_time, end_time, sort_by, relative_orbit_number):
         order="desc",
         ### added capability for specific "relativeorbitnumber", needs changes to i.sentinel.download.py first!!! ###
         relativeorbitnumber=relative_orbit_number)
-
-
-def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_bool, remove_therm_noise_bool):
-    """
-    aims at providing a complete solution for the scalable organization and processing of SAR satellite data
-    Copyright by John Truckenbrodt
-    TODO: ADD DOCSTRINGS!!!
-    :param start_time:
-    :param target_resolution:
-    :param target_CRS:
-    :param terrain_flat_bool:
-    :param remove_therm_noise_bool:
-    :return:
-    """
-    from datetime import datetime
-    from pyroSAR.snap.util import geocode
-
-    sentinel_file_list = extract_files_to_list(Paths.send_down_path, datatype=".zip")
-    for l, file in enumerate(sentinel_file_list):
-        geocode(infile=file, outdir=Paths.sen_processed_path, tr=target_resolution, t_srs=target_CRS,
-                terrainFlattening=terrain_flat_bool, removeS1ThermalNoise=remove_therm_noise_bool)
-
-        interval_time = datetime.now()
-        print("file " + str(l + 1) + " of " + str(len(sentinel_file_list) + 1) + " processed in " + str(
-            interval_time - start_time) + " Hr:min:sec")
-    subset_processed_data()
 
 
 def subset_import(overwrite_bool, output, polarization_type):
