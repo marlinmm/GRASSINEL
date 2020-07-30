@@ -267,5 +267,3 @@ def rvi_mapcalc(layername, overwrite_bool):
 
     rvi_visualization = Module("g.gui.animation")
     rvi_visualization(raster=rvi_list)
-
-
