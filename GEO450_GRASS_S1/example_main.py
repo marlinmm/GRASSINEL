@@ -5,11 +5,11 @@ from datetime import datetime
 
 
 def main():
-    ########## GRASS SETUP FUNCTION(S) #############
+    # ######### GRASS SETUP FUNCTION(S) #############
     grass_setup()
     # import_shapefile(path_to_shape=Paths.boundary_path, overwrite_bool=True)
 
-    ######### SENTINEL DOWNLOAD FUNCTION(S) #############
+    # ######## SENTINEL DOWNLOAD FUNCTION(S) #############
     # sen_download(start_time="2020-05-01", end_time="2020-05-04", sort_by="ingestiondate")
     # sen_download_new(start_time="2020-05-01", end_time="2020-05-30", sort_by="ingestiondate", relative_orbit_number=168)
 
@@ -19,11 +19,11 @@ def main():
 
     # ########## GRASS SPACE TIME CUBE FUNCTION(S) #############
     # create_stc(overwrite_bool=True, output="stc", polarization_type=["VH", "VV"], stc_info_bool=False, stc_statistics_bool=False)
-    # visualize_stc(output="stc", polarization_type=["VV", "VH"], stc_animation_bool=False, stc_timeline_bool=False)
+    visualize_stc(output="stc", polarization_type=["VV", "VH"], stc_animation_bool=True, stc_timeline_bool=False)
 
     # ########## GRASS ANALYSIS FUNCTION(S) #############
-    raster_algebra(basename="product", layername="result", expression=" = stcVH*stcVV", overwrite_bool=True)
-    rvi_mapcalc(layername="rvi", overwrite_bool=True)
+    # raster_algebra(basename="product", layername="result", expression=" = stcVH*stcVV", overwrite_bool=True)
+    # rvi_mapcalc(layername="rvi", overwrite_bool=True)
 
 
 if __name__ == "__main__":

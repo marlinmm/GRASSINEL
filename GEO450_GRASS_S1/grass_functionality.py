@@ -27,12 +27,8 @@ def sen_download(start_time, end_time, sort_by):
     """
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
-        ### Linux folder ###
         settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
         output=Paths.send_down_path,
-        ### Windows folder ###
-        # settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
-        # output="F:/GEO450_GRASS/Data/sentinel/test_GEO450",
         map="jena_boundary@PERMANENT",
         area_relation="Contains",
         producttype="GRD",
@@ -60,12 +56,8 @@ def sen_download_new(start_time, end_time, sort_by, relative_orbit_number):
     """
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
-        ### Linux folder ###
         settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
         output=Paths.send_down_path,
-        ### Windows folder ###
-        # settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
-        # output="F:/GEO450_GRASS/Data/sentinel/test_GEO450",
         map="jena_boundary@PERMANENT",
         area_relation="Contains",
         producttype="GRD",
@@ -88,7 +80,6 @@ def subset_import(overwrite_bool, output, polarization_type):
     :param polarization_type: list
         Choice between cross-polarization (VH) and/or co-polarization (VV) -> example: ["VH", "VV"]
     """
-
     for pol in polarization_type:
         file_list = extract_files_to_list(path_to_folder=Paths.subset_path, datatype=".tif")
         string = "IW___"
@@ -209,11 +200,15 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
 
 def raster_algebra(basename, layername, expression, overwrite_bool):
     """
-    TODO: add docstring and add r.mapcalc NDPI!!!
-    :param basename:
-    :param layername:
-    :param expression:
-    :param overwrite_bool:
+    calculates user-dependent raster-algebra functions on the imported space-time-cube
+    :param basename: string
+        Output tif-name
+    :param layername: string
+        Name of the formula result, e.g. "result"
+    :param expression: string
+        mathematic formula the raster calculation is based on
+    :param overwrite_bool: bool
+        Option of True or False, but True is strongly recommended!
     :return:
     """
     g_list_output(overwrite_bool)
