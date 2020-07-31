@@ -1,14 +1,16 @@
 import sys
 from GRASSINEL.support_functions import *
-from grass_session import Session, get_grass_gisbase
+from GRASSINEL.user_data import *
+from grass_session import get_grass_gisbase
 from grass_session import Session
 import grass.script as gscript
 import grass.script.setup as gsetup
 
 def GRASSBIN_import():
     """
-    ...
-    :return:
+    this function checks, what kind of OS is run and returns the corresponding grass7bin location
+    return: grass7bin: string
+        location of grass7bin
     """
     # general GRASS setup
     # input your Windows path
@@ -27,13 +29,15 @@ def GRASSBIN_import():
 
 def grass_setup():
     """
-    ...
-    :return:
+    this function initializes the GRASS session and creates the mapset with the user-specified variables
     """
+    user_data()
     location_name = GRASS_data.location_name
     crs = GRASS_data.crs
 
     grassbin = GRASSBIN_import()
+    if grassbin == "grass7bin_win":
+        print("You're using Windows, this module most likely will not work properly, please use a linux-based OS!!!")
     os.environ['GRASSBIN'] = grassbin
     gisbase = get_grass_gisbase()
     os.environ['GISBASE'] = gisbase
@@ -51,7 +55,7 @@ def grass_setup():
     # open a GRASS session and create the mapset if it does not yet exist
     with Session(gisdb=gisdb,
                  location=GRASS_data.location_name,
-                 create_opts='EPSG:' + crs) as session:
+                 create_opts='EPSG:' + crs):
         pass
     ##################################################################################
     # launch session
