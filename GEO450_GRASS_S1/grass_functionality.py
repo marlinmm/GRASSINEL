@@ -38,7 +38,7 @@ def sen_download(start_time, end_time, sort_by):
         order="asc")
 
 
-def sen_download_new(start_time, end_time, sort_by, relative_orbit_number):
+def sen_download_extended(start_time, end_time, sort_by, relative_orbit_number):
     """
         this function takes some parameters and downloads Sentinel-1 data using GRASS functions accordingly
 
