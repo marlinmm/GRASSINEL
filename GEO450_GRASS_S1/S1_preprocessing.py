@@ -1,16 +1,20 @@
 from GEO450_GRASS_S1.support_functions import *
 
+
 def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_bool, remove_therm_noise_bool):
     """
     aims at providing a complete solution for the scalable organization and processing of SAR satellite data
     Copyright by John Truckenbrodt
-    TODO: ADD DOCSTRINGS!!!
-    :param start_time:
-    :param target_resolution:
-    :param target_CRS:
-    :param terrain_flat_bool:
-    :param remove_therm_noise_bool:
-    :return:
+    :param start_time: datetime.datetime
+        timing parameter for run duration
+    :param target_resolution: int
+        target output resolution of processed Sentinel-1 image
+    :param target_CRS: int
+        target output coordinate reference system
+    :param terrain_flat_bool: boolean
+        boolean to activate or deactivate terrain flattening
+    :param remove_therm_noise_bool: boolean
+        boolean to activate or deactivate thermal noise removal
     """
     from datetime import datetime
     from pyroSAR.snap.util import geocode
@@ -24,4 +28,3 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
         print("file " + str(l + 1) + " of " + str(len(sentinel_file_list) + 1) + " processed in " + str(
             interval_time - start_time) + " Hr:min:sec")
     subset_processed_data()
-
