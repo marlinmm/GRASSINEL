@@ -16,7 +16,7 @@ def GRASSBIN_import():
     # input your Windows path
     grass7bin_win = r'C:/OSGeo4W64/bin/grass79.bat'
     # set your Linux grass version
-    grass7bin_lin = GRASS_data.grass_version
+    grass7bin_lin = GrassData.grass_version
 
     if sys.platform.startswith('linux'):
         # we assume that the GRASS GIS start script is available and in the PATH
@@ -32,8 +32,8 @@ def grass_setup():
     this function initializes the GRASS session and creates the mapset with the user-specified variables
     """
     user_data()
-    location_name = GRASS_data.location_name
-    crs = GRASS_data.crs
+    location_name = GrassData.location_name
+    crs = GrassData.crs
 
     grassbin = GRASSBIN_import()
     if grassbin == "grass7bin_win":
@@ -54,7 +54,7 @@ def grass_setup():
     ##################################################################################
     # open a GRASS session and create the mapset if it does not yet exist
     with Session(gisdb=gisdb,
-                 location=GRASS_data.location_name,
+                 location=GrassData.location_name,
                  create_opts='EPSG:' + crs):
         pass
     ##################################################################################
