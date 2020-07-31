@@ -1,5 +1,5 @@
 import os
-from GEO450_GRASS_S1.user_data import *
+from GRASSINEL.user_data import *
 from grass.pygrass.modules import Module
 
 
