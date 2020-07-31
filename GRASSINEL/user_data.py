@@ -2,6 +2,11 @@ import os
 
 
 def user_data():
+    """
+    return: location_name, crs, grass_version, main_dir, grass_dir, sen_down_dir, sen_processed_dir, subset_dir,
+            boundary_shape
+            self-explanatory returns, for acces through the Path classes "GrassData" and "Paths"
+    """
     ######## add user data for grass setup ########
     location_name = "GRASSINEL_test1"
     crs = "32632"
@@ -29,7 +34,7 @@ def user_data():
            boundary_shape
 
 
-class GRASS_data(object):
+class GrassData(object):
     location_name, crs, grass_version = user_data()[0:3]
 
 class Paths(object):
