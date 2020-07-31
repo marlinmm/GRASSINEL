@@ -24,5 +24,5 @@ _Developed in Python 3.6, currently only supported on linux-based OS_
 # Installation
 In case you have git installed you can install the package as follows:
 
-    pip install git+https://github.com/marlinmm/GEO450_GRASS_S1.git
+    pip install git+https://github.com/marlinmm/GRASSINEL.git
 
