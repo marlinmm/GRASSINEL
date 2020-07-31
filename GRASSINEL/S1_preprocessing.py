@@ -19,7 +19,7 @@ def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_b
     from datetime import datetime
     from pyroSAR.snap.util import geocode
 
-    sentinel_file_list = extract_files_to_list(Paths.send_down_path, datatype=".zip")
+    sentinel_file_list = extract_files_to_list(Paths.sen_down_path, datatype=".zip")
     for l, file in enumerate(sentinel_file_list):
         geocode(infile=file, outdir=Paths.sen_processed_path, tr=target_resolution, t_srs=target_CRS,
                 terrainFlattening=terrain_flat_bool, removeS1ThermalNoise=remove_therm_noise_bool)
