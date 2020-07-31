@@ -28,7 +28,7 @@ def sen_download(start_time, end_time, sort_by):
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
         settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
-        output=Paths.send_down_path,
+        output=Paths.sen_down_path,
         map="jena_boundary@PERMANENT",
         area_relation="Contains",
         producttype="GRD",
@@ -57,7 +57,7 @@ def sen_download_extended(start_time, end_time, sort_by, relative_orbit_number):
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
         settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
-        output=Paths.send_down_path,
+        output=Paths.sen_down_path,
         map="jena_boundary@PERMANENT",
         area_relation="Contains",
         producttype="GRD",
