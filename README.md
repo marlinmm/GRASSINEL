@@ -12,10 +12,10 @@ operations. Data is handled in GRASS internal formats and all available GRASS op
 * Automatic download of Sentinel-1 data using the GRASS addon i.sentinel.download
 * Pre-processing of downloaded Sentinel-1 using pyroSAR functionality ([ESA SNAP](http://step.esa.int/main/download/snap-download/)
  is required for the processing, see [here](https://pyrosar.readthedocs.io/en/latest/?badge=latest))
-* Automatic subetting of satellite data to specified region of interest
-* GRASS functionalty:
+* Automatic subsetting of satellite data to specified region of interest
+* GRASS functionality:
     * Creation of space time raster datasets (STRDS) in GRASS
-    * Different mutitemporal operations in GRASS
+    * Different multitemporal operations in GRASS
 * Future functionality:
     * pyWPS implementation
 

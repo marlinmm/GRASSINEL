@@ -24,8 +24,9 @@ def extract_files_to_list(path_to_folder, datatype):
 
 def import_polygons():
     """
-    imports polygon from path given in user_data.py class Paths
-    :return: shapelist
+    imports polygon from path given in user_data.py class Paths and is used as the
+    geographical boundary of raster analysis
+    :return: shape_list
         returns polygons from given shapefile as a list
     """
     import fiona
@@ -39,7 +40,7 @@ def import_polygons():
 
 def subset_processed_data():
     """
-    function to subset rasterdata using polygons from a shapefile and export the subset to a new folder
+    function to subset raster data using polygons from a shapefile and export the subset to a new folder
     all paths are given in user_data.py
     """
     import rasterio as rio
