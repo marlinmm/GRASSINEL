@@ -1,4 +1,4 @@
-from GEO450_GRASS_S1.support_functions import *
+from GRASSINEL.support_functions import *
 
 
 def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_bool, remove_therm_noise_bool):

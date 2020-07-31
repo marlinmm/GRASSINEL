@@ -1,4 +1,4 @@
-# GEO450_GRASS_S1
+# GRASSINEL
 University Project (FSU Jena) by Jonas Ziemer, Marlin M. Mueller and Patrick Fischer
 
 This tool combines [pyroSAR](https://github.com/johntruckenbrodt/pyroSAR) Sentinel-1 preprocessing capabilites with 

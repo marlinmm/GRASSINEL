@@ -10,7 +10,7 @@ else:
     with open(os.path.join(directory, 'README.md')) as f:
         long_description = f.read()
 
-setup(name='GEO450_GRASS_S1',
+setup(name='GRASSINEL',
       packages=find_packages(),
       include_package_data=True,
       setup_requires=['setuptools_scm'],

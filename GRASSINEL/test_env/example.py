@@ -3,7 +3,7 @@
 
 import os
 
-from GEO450_GRASS_S1.test_env.python_setup import GRASSBIN_import
+from GRASSINEL.test_env.python_setup import GRASSBIN_import
 grassbin = GRASSBIN_import()
 os.environ['GRASSBIN'] = grassbin
 

@@ -1,5 +1,5 @@
 import sys
-from GEO450_GRASS_S1.support_functions import *
+from GRASSINEL.support_functions import *
 from grass_session import Session, get_grass_gisbase
 from grass_session import Session
 import grass.script as gscript

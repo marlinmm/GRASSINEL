@@ -1,4 +1,4 @@
-from GEO450_GRASS_S1.support_functions import *
+from GRASSINEL.support_functions import *
 from grass.pygrass.modules import Module
 
 

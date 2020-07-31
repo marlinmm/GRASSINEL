@@ -1,6 +1,6 @@
-from GEO450_GRASS_S1.grass_functionality import *
-from GEO450_GRASS_S1.grass_setup import *
-from GEO450_GRASS_S1.S1_preprocessing import *
+from GRASSINEL.grass_functionality import *
+from GRASSINEL.grass_setup import *
+from GRASSINEL.S1_preprocessing import *
 from datetime import datetime
 
 
