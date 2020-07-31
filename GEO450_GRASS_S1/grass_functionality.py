@@ -1,64 +1,5 @@
-import sys
 from GEO450_GRASS_S1.support_functions import *
-from grass_session import Session, get_grass_gisbase
-from grass_session import Session
-import grass.script as gscript
-import grass.script.setup as gsetup
 from grass.pygrass.modules import Module
-
-
-def GRASSBIN_import():
-    """
-    ...
-    :return:
-    """
-    # general GRASS setup
-    # input your Windows path
-    grass7bin_win = r'C:/OSGeo4W64/bin/grass79.bat'
-    # set your Linux grass version
-    grass7bin_lin = GRASS_data.grass_version
-
-    if sys.platform.startswith('linux'):
-        # we assume that the GRASS GIS start script is available and in the PATH
-        # query GRASS 7 itself for its GISBASE
-        grass7bin = grass7bin_lin
-    elif sys.platform.startswith('win'):
-        grass7bin = grass7bin_win
-    return grass7bin
-
-
-def grass_setup():
-    """
-    ...
-    :return:
-    """
-    location_name = GRASS_data.location_name
-    crs = GRASS_data.crs
-
-    grassbin = GRASSBIN_import()
-    os.environ['GRASSBIN'] = grassbin
-    gisbase = get_grass_gisbase()
-    os.environ['GISBASE'] = gisbase
-    sys.path.append(os.path.join(os.environ['GISBASE'], 'bin'))
-    sys.path.append(os.path.join(os.environ['GISBASE'], 'lib'))
-    sys.path.append(os.path.join(os.environ['GISBASE'], 'scripts'))
-    sys.path.append(os.path.join(os.environ['GISBASE'], 'etc', 'python'))
-
-    # set folder to proj_lib:
-    os.environ['PROJ_LIB'] = '/usr/share/proj'
-
-    gisdb = Paths.grass_path
-    mapset = "PERMANENT"
-    ##################################################################################
-    # open a GRASS session and create the mapset if it does not yet exist
-    with Session(gisdb=gisdb,
-                 location=GRASS_data.location_name,
-                 create_opts='EPSG:' + crs) as session:
-        pass
-    ##################################################################################
-    # launch session
-    gsetup.init(gisbase, gisdb, location_name, mapset)
-    print(f"Current GRASS GIS 7 environment: {gscript.gisenv()}")
 
 
 def import_shapefile(path_to_shape, overwrite_bool):
@@ -76,20 +17,18 @@ def import_shapefile(path_to_shape, overwrite_bool):
 
 def sen_download(start_time, end_time, sort_by):
     """
-    TODO: ADD DOCSTRINGS!!!
-    :param start_time:
-    :param end_time:
-    :param sort_by:
-    :return:
+    this function takes some parameters and downloads Sentinel-1 data using GRASS functions accordingly
+    :param start_time: string
+        start date for the Sentinel-1 data download search
+    :param end_time: string
+        end date for the Sentinel-1 data download search
+    :param sort_by: string
+        variable to sort Sentinel-1 data by
     """
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
-        ### Linux folder ###
         settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
         output=Paths.send_down_path,
-        ### Windows folder ###
-        # settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
-        # output="F:/GEO450_GRASS/Data/sentinel/test_GEO450",
         map="jena_boundary@PERMANENT",
         area_relation="Contains",
         producttype="GRD",
@@ -99,23 +38,26 @@ def sen_download(start_time, end_time, sort_by):
         order="asc")
 
 
-def sen_download_new(start_time, end_time, sort_by, relative_orbit_number):
+def sen_download_extended(start_time, end_time, sort_by, relative_orbit_number):
     """
-    TODO: ADD DOCSTRINGS!!!
-    :param start_time:
-    :param end_time:
-    :param sort_by:
-    :param relative_orbit_number:
-    :return:
+    this function takes some parameters and downloads Sentinel-1 data using GRASS functions accordingly
+
+    !!! this function needs changes to i.sentinel.download first to work, changes are requested to official OSGEO
+    grass-addons repo !!!
+
+    :param start_time: string
+        start date for the Sentinel-1 data download search
+    :param end_time: string
+        end date for the Sentinel-1 data download search
+    :param sort_by: string
+        variable to sort Sentinel-1 data by
+    :param relative_orbit_number: int
+        this variable lets user specifically choose one relative orbit number to always receive the same orbit files
     """
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
-        ### Linux folder ###
         settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
         output=Paths.send_down_path,
-        ### Windows folder ###
-        # settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
-        # output="F:/GEO450_GRASS/Data/sentinel/test_GEO450",
         map="jena_boundary@PERMANENT",
         area_relation="Contains",
         producttype="GRD",
@@ -125,32 +67,6 @@ def sen_download_new(start_time, end_time, sort_by, relative_orbit_number):
         order="desc",
         ### added capability for specific "relativeorbitnumber", needs changes to i.sentinel.download.py first!!! ###
         relativeorbitnumber=relative_orbit_number)
-
-
-def pyroSAR_processing(start_time, target_resolution, target_CRS, terrain_flat_bool, remove_therm_noise_bool):
-    """
-    aims at providing a complete solution for the scalable organization and processing of SAR satellite data
-    Copyright by John Truckenbrodt
-    TODO: ADD DOCSTRINGS!!!
-    :param start_time:
-    :param target_resolution:
-    :param target_CRS:
-    :param terrain_flat_bool:
-    :param remove_therm_noise_bool:
-    :return:
-    """
-    from datetime import datetime
-    from pyroSAR.snap.util import geocode
-
-    sentinel_file_list = extract_files_to_list(Paths.send_down_path, datatype=".zip")
-    for l, file in enumerate(sentinel_file_list):
-        geocode(infile=file, outdir=Paths.sen_processed_path, tr=target_resolution, t_srs=target_CRS,
-                terrainFlattening=terrain_flat_bool, removeS1ThermalNoise=remove_therm_noise_bool)
-
-        interval_time = datetime.now()
-        print("file " + str(l + 1) + " of " + str(len(sentinel_file_list) + 1) + " processed in " + str(
-            interval_time - start_time) + " Hr:min:sec")
-    subset_processed_data()
 
 
 def subset_import(overwrite_bool, output, polarization_type):
@@ -164,7 +80,6 @@ def subset_import(overwrite_bool, output, polarization_type):
     :param polarization_type: list
         Choice between cross-polarization (VH) and/or co-polarization (VV) -> example: ["VH", "VV"]
     """
-
     for pol in polarization_type:
         file_list = extract_files_to_list(path_to_folder=Paths.subset_path, datatype=".tif")
         string = "IW___"
@@ -234,11 +149,11 @@ def create_stc(overwrite_bool, output, polarization_type, stc_info_bool, stc_sta
                      file=os.path.join(Paths.main_path, ("sentinel-filelist" + pol + ".txt")),
                      separator="pipe")
 
-        if stc_info_bool == True:
+        if stc_info_bool:
             info_stc = Module("t.info")
             info_stc(input=output + pol, type="strds")
 
-    if stc_statistics_bool == True:
+    if stc_statistics_bool:
         for pol in polarization_type:
             stc_statistics = Module("t.rast.univar")
             stc_statistics(flags='er',
@@ -261,7 +176,7 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
     :return:
     """
     for pol in polarization_type:
-        if stc_animation_bool == True:
+        if stc_animation_bool:
             if len(polarization_type) > 1:
                 stc_animation = Module("g.gui.animation")
                 print("----------------- " + str(polarization_type[0]) + " Time Series Animation" + " -----------------")
@@ -273,7 +188,7 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
                 print("----------------- " + str(pol) + " Time Series Animation" + " -----------------")
                 stc_animation(strds=output+pol)
 
-        if stc_timeline_bool == True:
+        if stc_timeline_bool:
             print("----------------------- " + "Timeline Plot" + " ----------------------")
             if len(polarization_type) > 1:
                 stc_timeline = Module("g.gui.timeline")
@@ -283,13 +198,17 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
                 stc_timeline(inputs=(output + pol))
 
 
-def t_rast_algebra(basename, layername, expression, overwrite_bool):
+def raster_algebra(basename, layername, expression, overwrite_bool):
     """
-    TODO: add docstring and add r.mapcalc
-    :param basename:
-    :param layername:
-    :param expression:
-    :param overwrite_bool:
+    calculates user-dependent raster-algebra functions on the imported space-time-cube
+    :param basename: string
+        Output tif-name
+    :param layername: string
+        Name of the formula result, e.g. "result"
+    :param expression: string
+        mathematic formula the raster calculation is based on
+    :param overwrite_bool: bool
+        Option of True or False, but True is strongly recommended!
     :return:
     """
     g_list_output(overwrite_bool)
@@ -311,19 +230,44 @@ def t_rast_algebra(basename, layername, expression, overwrite_bool):
                    expression=layername + expression,
                    basename=basename,
                    suffix="num",
-                   nprocs=1)
+                   nprocs=4)
 
 
-def raster_report(overwrite_bool):
+def rvi_mapcalc(layername, overwrite_bool):
     """
-    TODO: DOENST WORK YET!
+    calculates the radar vegetation index for all file of the space-time-cube
+    :param layername: string
+        Name of the output layer
+    :param overwrite_bool: bool
+        Option of True or False, but True is strongly recommended!
     :return:
     """
-    raster_report = Module("r.report")
-    raster_report(overwrite=overwrite_bool,
-                  map="product13_0@PERMANENT",
-                  units="k",
-                  null_value="*",
-                  page_length=0,
-                  page_width=79,
-                  nsteps=10)
+    VH = open(os.path.join(Paths.main_path, "sentinel-filelistVH.txt"))
+    new_list = VH.readlines()
+    file_VH_list = []
+    file_VV_list = []
+    for ele in new_list:
+        file_VH = ele[:ele.index("|")]
+        file_VH_list.append(file_VH)
+    VV = open(os.path.join(Paths.main_path, "sentinel-filelistVV.txt"))
+    new_list = VV.readlines()
+    print(new_list)
+    for ele in new_list:
+        file_VV = ele[:ele.index("|")]
+        file_VV_list.append(file_VV)
+
+    rvi_list = []
+    for i, rvi in enumerate(file_VH_list):
+        mapcalc_rvi = Module("r.mapcalc")
+        expression = f"= 4*(10^( {file_VH_list[i]} /10))/(10^( {file_VV_list[i]}/10)+10^( {file_VH_list[i]} /10))"
+        mapcalc_rvi(overwrite=overwrite_bool,
+                    expression=layername + str(i) + expression,
+                    region="current")
+        rvi_list.append(layername + str(i))
+
+        print("---------------------------- RVI Info - Layer " + layername + str(i) + " ----------------------------")
+        rvi_info = Module("r.info")
+        rvi_info(map=layername + str(i))
+
+    rvi_visualization = Module("g.gui.animation")
+    rvi_visualization(raster=rvi_list)
