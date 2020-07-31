@@ -17,7 +17,7 @@ def import_shapefile(path_to_shape, overwrite_bool):
 
 def sen_download(start_time, end_time, sort_by):
     """
-        this function takes some parameters and downloads Sentinel-1 data using GRASS functions accordingly
+    this function takes some parameters and downloads Sentinel-1 data using GRASS functions accordingly
     :param start_time: string
         start date for the Sentinel-1 data download search
     :param end_time: string
@@ -40,10 +40,10 @@ def sen_download(start_time, end_time, sort_by):
 
 def sen_download_extended(start_time, end_time, sort_by, relative_orbit_number):
     """
-        this function takes some parameters and downloads Sentinel-1 data using GRASS functions accordingly
+    this function takes some parameters and downloads Sentinel-1 data using GRASS functions accordingly
 
-        !!! this function needs changes to i.sentinel.download first to work, changes are requested to official OSGEO
-        grass-addons repo !!!
+    !!! this function needs changes to i.sentinel.download first to work, changes are requested to official OSGEO
+    grass-addons repo !!!
 
     :param start_time: string
         start date for the Sentinel-1 data download search
