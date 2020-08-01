@@ -1,5 +1,6 @@
 from GRASSINEL.support_functions import *
 from grass.pygrass.modules import Module
+import shutil
 
 
 def import_shapefile(path_to_shape, shapename, overwrite_bool):
@@ -95,9 +96,17 @@ def subset_import(overwrite_bool, output, polarization_type):
         cut_list.sort()
 
         sub_list = [j for j in file_list if pol in j]
+        if not os.path.exists(Paths.ordered_path):
+            os.mkdir(Paths.ordered_path)
+        new_order_list = []
+        for k in sub_list:
+            shutil.copy(k, Paths.ordered_path + "/" + k[k.index(string) + 7:])
+            new_order_list.append(Paths.ordered_path + "/" + k[k.index(string) + 7:])
+            new_order_list.sort()
+        print(new_order_list)
 
         filelist_path = os.path.join(Paths.main_path, ("sentinel-filelist" + pol + ".txt"))
-        for i, tifs in enumerate(sub_list):
+        for i, tifs in enumerate(new_order_list):
             sensubsetimport = Module("r.in.gdal")
             sensubsetimport(input=tifs,
                              output=output + pol + str(i),
