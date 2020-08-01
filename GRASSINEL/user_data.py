@@ -8,7 +8,7 @@ def user_data():
             self-explanatory returns, for acces through the Path classes "GrassData" and "Paths"
     """
     ######## add user data for grass setup ########
-    location_name = "GRASSINEL_test5"
+    location_name = "GRASSINEL_test"
     crs = "32632"
     grass_version = "grass79"
 
