@@ -7,7 +7,7 @@ from datetime import datetime
 def main():
     # ######### GRASS SETUP FUNCTION(S) #############
     grass_setup()
-    # import_shapefile(path_to_shape=Paths.boundary_path, overwrite_bool=True)
+    # import_shapefile(path_to_shape=Paths.boundary_path, shapename="jena_boundary@PERMANENT", overwrite_bool=True)
 
     # ######## SENTINEL DOWNLOAD FUNCTION(S) #############
     # sen_download(start_time="2020-05-01", end_time="2020-05-04", sort_by="ingestiondate")
@@ -18,11 +18,11 @@ def main():
     # subset_import(overwrite_bool=True, output="raster", polarization_type=["VH", "VV"])
 
     # ########## GRASS SPACE TIME CUBE FUNCTION(S) #############
-    # create_stc(overwrite_bool=True, output="stc", polarization_type=["VH", "VV"], stc_info_bool=False, stc_statistics_bool=False)
-    visualize_stc(output="stc", polarization_type=["VV", "VH"], stc_animation_bool=True, stc_timeline_bool=False)
+    create_stc(overwrite_bool=True, output="stcube", polarization_type=["VH", "VV"], stc_info_bool=True, stc_statistics_bool=True)
+    visualize_stc(output="stcube", polarization_type=["VH", "VV"], stc_animation_bool=True, stc_timeline_bool=True)
 
     # ########## GRASS ANALYSIS FUNCTION(S) #############
-    # raster_algebra(basename="product", layername="result", expression=" = stcVH*stcVV", overwrite_bool=True)
+    # raster_algebra(basename="product", layername="result", expression=" = stcubeVH*stcubeVV", overwrite_bool=True)
     # rvi_mapcalc(layername="rvi", overwrite_bool=True)
 
 

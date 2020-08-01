@@ -8,7 +8,7 @@ def user_data():
             self-explanatory returns, for acces through the Path classes "GrassData" and "Paths"
     """
     ######## add user data for grass setup ########
-    location_name = "GRASSINEL_test1"
+    location_name = "GRASSINEL_test5"
     crs = "32632"
     grass_version = "grass79"
 
@@ -16,8 +16,8 @@ def user_data():
     boundary_shape = "/home/user/Desktop/GRASS Jena Workshop/geodata/osm/jena_boundary.gpkg"
     main_dir = os.path.abspath("/home/user/Desktop/GRASSINEL_dir")
     data_dir = os.path.abspath("/media/user/2nd_disk")
-    ######## create needed directories ########
 
+    ######## create needed directories ########
     grass_dir = os.path.join(main_dir, 'grass_dir')
     sen_down_dir = os.path.join(data_dir, 'sen_down_dir')
     sen_processed_dir = os.path.join(data_dir, 'sen_processed_dir')
