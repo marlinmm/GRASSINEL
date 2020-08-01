@@ -203,6 +203,24 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
             stc_timeline(inputs=(output + polarization_type[0]))
 
 
+def raster_comparison(raster1_name, raster2_name, mode):
+    """
+    allows visual mapswipe functionality between two raster scenes
+    :param raster1_name: string
+        Name of the first input raster
+    :param raster2_name: string
+        Name of the second input raster
+    :param mode: string
+        Type of the visualization: choice between "swipe" and "mirror"
+    :return:
+    """
+    print("----------------------- " + "Scene Comparison" + " ----------------------")
+    stc_mapswipe = Module("g.gui.mapswipe")
+    stc_mapswipe(first=raster1_name,
+                second=raster2_name,
+                mode=mode)
+
+
 def raster_algebra(basename, layername, expression, overwrite_bool):
     """
     calculates user-dependent raster-algebra functions on the imported space-time-cube

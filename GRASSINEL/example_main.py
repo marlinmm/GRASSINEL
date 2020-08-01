@@ -18,8 +18,9 @@ def main():
     # subset_import(overwrite_bool=True, output="raster", polarization_type=["VH", "VV"])
 
     # ########## GRASS SPACE TIME CUBE FUNCTION(S) #############
-    create_stc(overwrite_bool=True, output="stcube", polarization_type=["VH", "VV"], stc_info_bool=True, stc_statistics_bool=True)
-    visualize_stc(output="stcube", polarization_type=["VH", "VV"], stc_animation_bool=True, stc_timeline_bool=True)
+    # create_stc(overwrite_bool=True, output="stcube", polarization_type=["VH", "VV"], stc_info_bool=True, stc_statistics_bool=True)
+    # visualize_stc(output="stcube", polarization_type=["VH", "VV"], stc_animation_bool=True, stc_timeline_bool=True)
+    # raster_comparison(raster1_name="rasterVH0@PERMANENT", raster2_name="rasterVH0@PERMANENT", mode="swipe")
 
     # ########## GRASS ANALYSIS FUNCTION(S) #############
     # raster_algebra(basename="product", layername="result", expression=" = stcubeVH*stcubeVV", overwrite_bool=True)
