@@ -28,4 +28,6 @@ In case you have git installed you can install the package as follows:
 
 # Examples
 Example of created timeseries processed using pyroSAR and created using GRASS GIS time series functionality
-![S1_time_series_20m](preview_files/S1_timeseries_20m_example.gif) 
+![S1_time_series_20m](GRASSINEL/preview_files/S1_timeseries_20m_example.gif) 
+
+![S1_time_series_50m](GRASSINEL/preview_files/S1_timeseries_50m_example.gif) 
