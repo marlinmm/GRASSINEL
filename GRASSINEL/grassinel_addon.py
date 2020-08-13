@@ -20,13 +20,6 @@
 #% description: Name of input raster
 #%end
 #%option
-#% key: date
-#% type: string
-#% label: timing parameter for run duration (eg. "2020-05-01")
-#% description: Starttime
-#% required: yes
-#%end
-#%option
 #% key: res
 #% type: string
 #% label: Target Resolution
