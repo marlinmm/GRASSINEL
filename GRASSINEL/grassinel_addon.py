@@ -20,6 +20,13 @@
 #% description: Name of input raster
 #%end
 #%option
+#% key: date
+#% type: string
+#% label: Starttime
+#% description: Starttime
+#% required: yes
+#%end
+#%option
 #% key: res
 #% type: string
 #% label: Target Resolution
@@ -63,8 +70,9 @@ from subprocess import PIPE
 
 from grass.script import parser, parse_key_val
 from grass.pygrass.modules import Module
-from datetime import datetime
 from pyroSAR.snap.util import geocode
+from GRASSINEL.S1_preprocessing import *
+from GRASSINEL.grass_functionality import *
 
 # def cleanup():
 #     Module('g.remove', flags='f', name='region_mask', type='vector')
@@ -82,13 +90,16 @@ def main(options, flags):
     # Module("r.info",
     #        map=options["raster"])
 
-    geocode(
-        infile=options["raster"],
-        outdir="/media/user/2nd_disk/sen_processed_dir",
-        tr=options["res"],
-        t_srs=options["crs"],
-        terrainFlattening=options["terr_flat"],
-        removeS1ThermalNoise=options["noise_rem"])
+    pyroSAR_processing(start_time=options["raster"], target_resolution=options["res"], target_CRS=options["crs"],
+                       terrain_flat_bool=options["terr_flat"], remove_therm_noise_bool=options["noise_rem"])
+    # subset_import(overwrite_bool=True, output="raster", polarization_type=["VH", "VV"])
+    # geocode(
+    #     infile=options["raster"],
+    #     outdir="/media/user/2nd_disk/sen_processed_dir",
+    #     tr=options["res"],
+    #     t_srs=options["crs"],
+    #     terrainFlattening=options["terr_flat"],
+    #     removeS1ThermalNoise=options["noise_rem"])
 
         # interval_time = datetime.now()
         # print("file " + str(l + 1) + " of " + str(len(sentinel_file_list) + 1) + " processed in " + str(
