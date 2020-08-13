@@ -1,8 +1,9 @@
 from GRASSINEL.support_functions import *
 from grass.pygrass.modules import Module
+import shutil
 
 
-def import_shapefile(path_to_shape, overwrite_bool):
+def import_shapefile(path_to_shape, shapename, overwrite_bool):
     """
     imports the boundary of the area of investigation
     :param path_to_shape: string
@@ -13,6 +14,11 @@ def import_shapefile(path_to_shape, overwrite_bool):
     """
     ogrimport = Module("v.in.ogr")
     ogrimport(path_to_shape, overwrite=overwrite_bool)
+
+    showregion = Module("g.region")
+    showregion(flags='p',
+                overwrite =overwrite_bool,
+                vector=shapename)
 
 
 def sen_download(start_time, end_time, sort_by):
@@ -28,7 +34,7 @@ def sen_download(start_time, end_time, sort_by):
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
         settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
-        output=Paths.send_down_path,
+        output=Paths.sen_down_path,
         map="jena_boundary@PERMANENT",
         area_relation="Contains",
         producttype="GRD",
@@ -57,7 +63,7 @@ def sen_download_extended(start_time, end_time, sort_by, relative_orbit_number):
     sentineldownload = Module("i.sentinel.download")
     sentineldownload(
         settings="/home/user/Desktop/GRASS Jena Workshop/settings.txt",
-        output=Paths.send_down_path,
+        output=Paths.sen_down_path,
         map="jena_boundary@PERMANENT",
         area_relation="Contains",
         producttype="GRD",
@@ -90,11 +96,19 @@ def subset_import(overwrite_bool, output, polarization_type):
         cut_list.sort()
 
         sub_list = [j for j in file_list if pol in j]
+        if not os.path.exists(Paths.ordered_path):
+            os.mkdir(Paths.ordered_path)
+        new_order_list = []
+        for k in sub_list:
+            shutil.copy(k, Paths.ordered_path + "/" + k[k.index(string) + 7:])
+            new_order_list.append(Paths.ordered_path + "/" + k[k.index(string) + 7:])
+            new_order_list.sort()
+        print(new_order_list)
+
         filelist_path = os.path.join(Paths.main_path, ("sentinel-filelist" + pol + ".txt"))
-        for i, tifs in enumerate(sub_list):
-            print(tifs)
-            sensubsetlimport = Module("r.in.gdal")
-            sensubsetlimport(input=tifs,
+        for i, tifs in enumerate(new_order_list):
+            sensubsetimport = Module("r.in.gdal")
+            sensubsetimport(input=tifs,
                              output=output + pol + str(i),
                              memory=500,
                              offset=0,
@@ -107,12 +121,13 @@ def subset_import(overwrite_bool, output, polarization_type):
                 polarization = pol
                 if item.__contains__(pol):
                     i = i + 1
-                    f.write(output + pol + str(i) + "|" + item[:4] + "-" +
+                    f.write(output + pol + str(i) + "@PERMANENT" + "|" + item[:4] + "-" +
                             item[4:6] + "-" +
-                            item[6:8] + " " +
+                            item[6:8] +
                             # For minute resolution
-                            #item[9:11] + ":" +
-                            #item[11:13] +
+                            # " " +
+                            # item[9:11] + ":" +
+                            # item[11:13] +
                             "|" +
                             item[16:18] + "\n")
 
@@ -175,27 +190,44 @@ def visualize_stc(output, polarization_type, stc_animation_bool, stc_timeline_bo
         Option of True or False, returns a timeline plot with all downloaded dates with GRASS Timeline Tool
     :return:
     """
-    for pol in polarization_type:
-        if stc_animation_bool:
-            if len(polarization_type) > 1:
-                stc_animation = Module("g.gui.animation")
-                print("----------------- " + str(polarization_type[0]) + " Time Series Animation" + " -----------------")
-                stc_animation(strds=(output + polarization_type[0]))
-                print("----------------- " + str(polarization_type[1]) + " Time Series Animation" + " -----------------")
-                stc_animation(strds=(output + polarization_type[1]))
-            else:
-                stc_animation = Module("g.gui.animation")
-                print("----------------- " + str(pol) + " Time Series Animation" + " -----------------")
-                stc_animation(strds=output+pol)
+    if stc_animation_bool:
+        if len(polarization_type) > 1:
+            stc_animation = Module("g.gui.animation")
+            print("----------------- " + str(polarization_type[0]) + " Time Series Animation" + " -----------------")
+            stc_animation(strds=(output + polarization_type[0]))
+            print("----------------- " + str(polarization_type[1]) + " Time Series Animation" + " -----------------")
+            stc_animation(strds=(output + polarization_type[1]))
+        else:
+            stc_animation = Module("g.gui.animation")
+            print("----------------- " + str(polarization_type[0]) + " Time Series Animation" + " -----------------")
+            stc_animation(strds=output+polarization_type[0])
 
-        if stc_timeline_bool:
-            print("----------------------- " + "Timeline Plot" + " ----------------------")
-            if len(polarization_type) > 1:
-                stc_timeline = Module("g.gui.timeline")
-                stc_timeline(inputs=(output + polarization_type[0], output + polarization_type[1]))
-            else:
-                stc_timeline = Module("g.gui.timeline")
-                stc_timeline(inputs=(output + pol))
+    if stc_timeline_bool:
+        print("----------------------- " + "Timeline Plot" + " ----------------------")
+        if len(polarization_type) > 1:
+            stc_timeline = Module("g.gui.timeline")
+            stc_timeline(inputs=(output + polarization_type[0], output + polarization_type[1]))
+        else:
+            stc_timeline = Module("g.gui.timeline")
+            stc_timeline(inputs=(output + polarization_type[0]))
+
+
+def raster_comparison(raster1_name, raster2_name, mode):
+    """
+    allows visual mapswipe functionality between two raster scenes
+    :param raster1_name: string
+        Name of the first input raster
+    :param raster2_name: string
+        Name of the second input raster
+    :param mode: string
+        Type of the visualization: choice between "swipe" and "mirror"
+    :return:
+    """
+    print("----------------------- " + "Scene Comparison" + " ----------------------")
+    stc_mapswipe = Module("g.gui.mapswipe")
+    stc_mapswipe(first=raster1_name,
+                second=raster2_name,
+                mode=mode)
 
 
 def raster_algebra(basename, layername, expression, overwrite_bool):

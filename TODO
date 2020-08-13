@@ -1,0 +1,19 @@
+ToDo-List:
+
+PyWPS:
+- PyWPS-Output (XML?) an Webserver weitergeben, um lesbaren Output zu erhalten
+- PyWPS-Dienst in unser Modul einbetten
+    * Zugriff (import?) auf pywps-flask aus unserem Modul
+    * eigentliche Funktion für den PyWPS-Dienst schreiben, bzw. bestehende Funtkionen einbetten
+- Fragen:
+    * Ist PyWPS schon der Webserver, der den Output darstellt, oder muss die XML-Datei an eine weitere Stelle übergeben werden?
+    * Aktuell führen wir PyWPS über die demo.py des pywps-flask Ordners von Martin L. aus -> Ist ja nicht wirklich funktional
+    * ...
+
+GRASS-Modul:
+- Erstellung eines neuen GRASS-Moduls
+- Darstellung der Funktionalität (siehe Übung 12 von Martin L.)
+- Einbettung in unser Skript? --> Wie die Übergabe an GRASS? --> siehe GRASS add-ons
+
+Jupyter Notebook:
+- Bonus --> Visualisierung des Workflows mit Besipielbnild auf github (siehe https://github.com/marlinmm/BanDiTS/blob/master/notebook/example.ipynb)
