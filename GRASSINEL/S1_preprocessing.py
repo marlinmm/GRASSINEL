@@ -1,7 +1,7 @@
 from GRASSINEL.support_functions import *
 
 
-def pyroSAR_processing(down_path, target_resolution, target_CRS, terrain_flat_bool, remove_therm_noise_bool):
+def pyroSAR_processing(down_path, processed_path, target_resolution, target_CRS, terrain_flat_bool, remove_therm_noise_bool):
     """
     aims at providing a complete solution for the scalable organization and processing of SAR satellite data
     Copyright by John Truckenbrodt
@@ -22,7 +22,7 @@ def pyroSAR_processing(down_path, target_resolution, target_CRS, terrain_flat_bo
     start_time = datetime.now()
     sentinel_file_list = extract_files_to_list(down_path, datatype=".zip")
     for l, file in enumerate(sentinel_file_list):
-        geocode(infile=file, outdir=Paths.sen_processed_path, tr=target_resolution, t_srs=target_CRS,
+        geocode(infile=file, outdir=processed_path, tr=target_resolution, t_srs=target_CRS,
                 terrainFlattening=terrain_flat_bool, removeS1ThermalNoise=remove_therm_noise_bool)
 
         interval_time = datetime.now()
