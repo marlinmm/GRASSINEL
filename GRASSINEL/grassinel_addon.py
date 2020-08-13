@@ -51,8 +51,11 @@
 #% answer: FALSE
 #% required: yes
 #%end
-#%option G_OPT_R_OUTPUT
+#%option G_OPT_M_DIR
 #% description: Output of the preprocessing
+#% key: output
+#% type: string
+#% description: location of output folder for processed S1-data
 #%end
 
 import sys
@@ -83,7 +86,7 @@ def main(options, flags):
     # Module("r.info",
     #        map=options["raster"])
 
-    pyroSAR_processing(down_path=options["raster"], target_resolution=options["res"], target_CRS=options["crs"],
+    pyroSAR_processing(down_path=options["raster"], processed_path=options["output"], target_resolution=options["res"], target_CRS=options["crs"],
                        terrain_flat_bool=options["terr_flat"], remove_therm_noise_bool=options["noise_rem"])
     # subset_import(overwrite_bool=True, output="raster", polarization_type=["VH", "VV"])
     # geocode(
