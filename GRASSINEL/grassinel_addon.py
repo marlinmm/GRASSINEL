@@ -20,13 +20,6 @@
 #% description: Name of input raster
 #%end
 #%option
-#% key: date
-#% type: string
-#% label: Starttime
-#% description: Starttime
-#% required: yes
-#%end
-#%option
 #% key: res
 #% type: string
 #% label: Target Resolution
@@ -90,7 +83,7 @@ def main(options, flags):
     # Module("r.info",
     #        map=options["raster"])
 
-    pyroSAR_processing(start_time=options["raster"], target_resolution=options["res"], target_CRS=options["crs"],
+    pyroSAR_processing(down_path=options["raster"], target_resolution=options["res"], target_CRS=options["crs"],
                        terrain_flat_bool=options["terr_flat"], remove_therm_noise_bool=options["noise_rem"])
     # subset_import(overwrite_bool=True, output="raster", polarization_type=["VH", "VV"])
     # geocode(
