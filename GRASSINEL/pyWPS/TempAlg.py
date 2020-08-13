@@ -112,3 +112,4 @@ class TempAlg(Process):
         response.outputs['stats2'].data = outstr2
 
         return response
+
