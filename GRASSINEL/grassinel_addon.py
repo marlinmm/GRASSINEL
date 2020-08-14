@@ -26,7 +26,7 @@
 #%end
 #%option
 #% key: res
-#% type: string
+#% type: integer
 #% label: Target Resolution
 #% description: Target Resolution
 #% answer: 50
@@ -40,21 +40,15 @@
 #% answer: 32632
 #% required: yes
 #%end
-#%option
-#% key: t_flat
-#% type: string
-#% label: Terrain flattening ("FALSE" to disable or "TRUE" to enable)
-#% description: terrain flattening
-#% answer: FALSE
-#% required: yes
+#%flag
+#% key: f
+#% description: Terrain flattening
+#% guisection: PyroSAR Settings
 #%end
-#%option
-#% key: noise
-#% type: string
-#% label: Thermal Noise Removal ("FALSE" to disable or "TRUE" to enable)
-#% description: Thermal Noise Removal
-#% answer: FALSE
-#% required: yes
+#%flag
+#% key: n
+#% description: Remove thermal noise from Sentinel-1 Scene
+#% guisection: PyroSAR Settings
 #%end
 #%flag
 #% key: i
@@ -84,23 +78,39 @@ from grass.script import parser
 from GRASSINEL.S1_preprocessing import *
 
 
+# Function for splitting paths and extracting filenames
 def filenames(path):
     head, tail = ntpath.split(path)
     return tail or ntpath.basename(head)
 
 
 def main(options, flags):
+    # flag for enabling/disabling terrain flattening
+    flag_f = flags["f"]
+    if flag_f:
+        terr_f_bool = True
+    else:
+        terr_f_bool = False
+    # flag for enabling/disabling thermal noise removal
+    flag_n = flags["n"]
+    if flag_n:
+        noise_bool = True
+    else:
+        noise_bool = False
+    # pyroSAR Processing
     pyroSAR_processing(down_path=options["raster"], processed_path=options["output"], target_resolution=options["res"],
-                       target_CRS=options["crs"], terrain_flat_bool=options["t_flat"],
-                       remove_therm_noise_bool=options["noise"])
+                       target_CRS=options["crs"], terrain_flat_bool=terr_f_bool,
+                       remove_therm_noise_bool=noise_bool)
 
+    # flag for enabling overwriting
     flag_o = flags["o"]
-    flag_i = flags["i"]
     if flag_o:
         overwrite_bool = True
     else:
         overwrite_bool = False
-
+    # flag for enabling of the import functionality
+    flag_i = flags["i"]
+    # import of processed sentinel-1 scenes in the GRASS location
     if flag_i:
         file_list = [f for f in glob.glob(options["output"]+"/*.tif")]
         for j, tifs in enumerate(file_list):
