@@ -35,3 +35,15 @@ _Sentinel-1 time series from 2020-06-06 to 2020-07-29 using only relative orbit 
 ![S1_time_series_50m](GRASSINEL/preview_files/S1_timeseries_50m_example.gif)
 _Sentinel-1 time series from XXX to XXX using all available datasets for the chosen time frame in desending direction 
 with 20m resolution without terrain flattening and thermal noise removal (roughly 2 mins on 8 cores per scene)_
+
+![S1_time_series_date_plot](GRASSINEL/preview_files/time_series_date_plot.png)
+_Point plot of Sen-1 acquisition dates for VV and VH polariazation printed by the "visualize_stc" function_
+
+#
+**!!! needs to be updated !!!**
+# Workflow of the module:
+![GRASSINEL_workflow](GRASSINEL/preview_files/GRASSINEL_workflow.png)
+_GRASSINEL workflow_
+
+**!!! needs to be updated !!!**
+#
