@@ -35,8 +35,9 @@ _Sentinel-1 time series from 2020-06-06 to 2020-07-29 using only relative orbit 
 <br/>
 
 ![S1_time_series_50m](GRASSINEL/preview_files/S1_timeseries_50m_example.gif)
-_Sentinel-1 time series from XXX to XXX using all available datasets for the chosen time frame in desending direction 
-with 20m resolution without terrain flattening and thermal noise removal (roughly 2 mins on 8 cores per scene)_
+_Sentinel-1 time series from 2020-06-01 to 2020-06-07 using all available datasets for the chosen time frame in 
+ascending direction with 50m resolution without terrain flattening and thermal noise removal (roughly 2 mins on 8 cores 
+per scene)_
 
 <br/>
 
