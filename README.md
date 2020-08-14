@@ -28,6 +28,10 @@ In case you have git installed you can install the package as follows:
 
 # Examples
 Example of created timeseries processed using pyroSAR and created using GRASS GIS time series functionality
-![S1_time_series_20m](GRASSINEL/preview_files/S1_timeseries_20m_example.gif) 
+![S1_time_series_20m](GRASSINEL/preview_files/S1_timeseries_20m_example.gif)
+_Sentinel-1 time series from 2020-06-06 to 2020-07-29 using only relative orbit number 168 in desending direction with
+20m resolution with terrain flattening and thermal noise removal active (roughly 5 mins on 14 cores per scene)_
 
-![S1_time_series_50m](GRASSINEL/preview_files/S1_timeseries_50m_example.gif) 
+![S1_time_series_50m](GRASSINEL/preview_files/S1_timeseries_50m_example.gif)
+_Sentinel-1 time series from XXX to XXX using all available datasets for the chosen time frame in desending direction 
+with 20m resolution without terrain flattening and thermal noise removal (roughly 2 mins on 8 cores per scene)_
