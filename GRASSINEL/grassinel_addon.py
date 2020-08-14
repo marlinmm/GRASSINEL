@@ -75,19 +75,18 @@
 #% answer: 500
 #% guisection: Import Settings
 #%end
-#%option G_OPT_R_OUTPUT
-#% key: out_name
-#% label: Name of imported raster maps
-#% description: Name of imported raster maps
-#% required: no
-#% guisection: Import Settings
-#%end
+
 
 import sys
-
+import glob
+import ntpath
 from grass.script import parser
 from GRASSINEL.S1_preprocessing import *
-from GRASSINEL.support_functions import *
+
+
+def filenames(path):
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)
 
 
 def main(options, flags):
@@ -103,11 +102,12 @@ def main(options, flags):
         overwrite_bool = False
 
     if flag_i:
-        file_list = extract_files_to_list(path_to_folder=options["output"], datatype=".tif")
-        for i, tifs in enumerate(file_list):
+        file_list = [f for f in glob.glob(options["output"]+"/*.tif")]
+        for j, tifs in enumerate(file_list):
+            filename = filenames(tifs)
             Module("r.in.gdal",
                    input=tifs,
-                   output=options["out_name"] + str(i),
+                   output=filename + "__processed",
                    memory=options["memory"],
                    offset=0,
                    num_digits=0,
