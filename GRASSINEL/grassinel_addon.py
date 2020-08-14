@@ -56,8 +56,10 @@
 #% answer: FALSE
 #% required: yes
 #%end
-#%option G_OPT_R_OUTPUT
-#% key: out_name
+#%flag
+#% key: i
+#% description: Import processed Sentinel-1 Data in current GRASS location
+#% guisection: Import Settings
 #%end
 #%flag
 #% key: o
@@ -73,7 +75,13 @@
 #% answer: 500
 #% guisection: Import Settings
 #%end
-
+#%option G_OPT_R_OUTPUT
+#% key: out_name
+#% label: Name of imported raster maps
+#% description: Name of imported raster maps
+#% required: no
+#% guisection: Import Settings
+#%end
 
 import sys
 
@@ -87,22 +95,23 @@ def main(options, flags):
                        target_CRS=options["crs"], terrain_flat_bool=options["t_flat"],
                        remove_therm_noise_bool=options["noise"])
 
-    flag_o = flags['o']
+    flag_o = flags["o"]
+    flag_i = flags["i"]
     if flag_o:
         overwrite_bool = True
     else:
         overwrite_bool = False
 
-    file_list = extract_files_to_list(path_to_folder=options["output"], datatype=".tif")
-    for i, tifs in enumerate(file_list):
-        print(tifs)
-        Module("r.in.gdal",
-               input=tifs,
-               output=options["out_name"] + str(i),
-               memory=options["memory"],
-               offset=0,
-               num_digits=0,
-               overwrite=overwrite_bool)
+    if flag_i:
+        file_list = extract_files_to_list(path_to_folder=options["output"], datatype=".tif")
+        for i, tifs in enumerate(file_list):
+            Module("r.in.gdal",
+                   input=tifs,
+                   output=options["out_name"] + str(i),
+                   memory=options["memory"],
+                   offset=0,
+                   num_digits=0,
+                   overwrite=overwrite_bool)
 
 
 if __name__ == "__main__":
