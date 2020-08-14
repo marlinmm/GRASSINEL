@@ -6,18 +6,23 @@
 #
 # AUTHOR(S):    Patrick Fischer, Marlin Müller, Jonas Ziemer
 #
-# PURPOSE:      Preprocessing of Sentinel-1 Scenes with PyroSAR
+# PURPOSE:      Preprocessing of downloaded Sentinel-1 Scenes with PyroSAR (Copyright by John Truckenbrodt).
+#
 #
 # DATE:         Thursday Aug  13 13:15:00 2020
 #
 ##############################################################################
 
 #%module
-#% description: Preprocessing with PyroSAR
+#% description: Preprocessing of downloaded Sentinel-1 Data with pyroSAR (Copyright by John Truckenbrodt)
 #%end
 #%option G_OPT_M_DIR
 #% key: raster
-#% description: Name of input raster
+#% description: Folder of unprocessed Sentinel-1 Data
+#%end
+#%option G_OPT_M_DIR
+#% key: output
+#% description: Folder for the processed Sentinel-1 Data to be stored
 #%end
 #%option
 #% key: res
@@ -30,13 +35,13 @@
 #%option
 #% key: crs
 #% type: string
-#% label: Target CRS
+#% label: Target coordinate system in EPSG
 #% description: Target CRS
 #% answer: 32632
 #% required: yes
 #%end
 #%option
-#% key: terr_flat
+#% key: t_flat
 #% type: string
 #% label: Terrain flattening ("FALSE" to disable or "TRUE" to enable)
 #% description: terrain flattening
@@ -44,65 +49,62 @@
 #% required: yes
 #%end
 #%option
-#% key: noise_rem
+#% key: noise
 #% type: string
 #% label: Thermal Noise Removal ("FALSE" to disable or "TRUE" to enable)
 #% description: Thermal Noise Removal
 #% answer: FALSE
 #% required: yes
 #%end
-#%option G_OPT_M_DIR
-#% description: Output of the preprocessing
-#% key: output
-#% type: string
-#% description: location of output folder for processed S1-data
+#%option G_OPT_R_OUTPUT
+#% key: out_name
+#%end
+#%flag
+#% key: o
+#% description: Override projection check (use current location's projection)
+#% guisection: Import Settings
+#%end
+#%option
+#% key: memory
+#% type: integer
+#% multiple: no
+#% label: Maximum memory to be used (in MB)
+#% description: Cache size for raster rows
+#% answer: 500
+#% guisection: Import Settings
 #%end
 
+
 import sys
-import os
-import atexit
 
-from subprocess import PIPE
-
-from grass.script import parser, parse_key_val
-from grass.pygrass.modules import Module
-from pyroSAR.snap.util import geocode
+from grass.script import parser
 from GRASSINEL.S1_preprocessing import *
-from GRASSINEL.grass_functionality import *
-
-# def cleanup():
-#     Module('g.remove', flags='f', name='region_mask', type='vector')
-#     Module('g.remove', flags='f', name='ndvi', type='raster')
-#     Module('g.remove', flags='f', name='ndvi_class', type='raster')
-#     Module('g.remove', flags='f', name='ndvi_class', type='vector')
+from GRASSINEL.support_functions import *
 
 
 def main(options, flags):
-    # Module("g.region",
-    #        overwrite=True,
-    #        vector="jena_boundary",
-    #        align=options["raster"])
+    pyroSAR_processing(down_path=options["raster"], processed_path=options["output"], target_resolution=options["res"],
+                       target_CRS=options["crs"], terrain_flat_bool=options["t_flat"],
+                       remove_therm_noise_bool=options["noise"])
 
-    # Module("r.info",
-    #        map=options["raster"])
+    flag_o = flags['o']
+    if flag_o:
+        overwrite_bool = True
+    else:
+        overwrite_bool = False
 
-    pyroSAR_processing(down_path=options["raster"], processed_path=options["output"], target_resolution=options["res"], target_CRS=options["crs"],
-                       terrain_flat_bool=options["terr_flat"], remove_therm_noise_bool=options["noise_rem"])
-    # subset_import(overwrite_bool=True, output="raster", polarization_type=["VH", "VV"])
-    # geocode(
-    #     infile=options["raster"],
-    #     outdir="/media/user/2nd_disk/sen_processed_dir",
-    #     tr=options["res"],
-    #     t_srs=options["crs"],
-    #     terrainFlattening=options["terr_flat"],
-    #     removeS1ThermalNoise=options["noise_rem"])
-
-        # interval_time = datetime.now()
-        # print("file " + str(l + 1) + " of " + str(len(sentinel_file_list) + 1) + " processed in " + str(
-        #     interval_time - start_time) + " Hr:min:sec")
+    file_list = extract_files_to_list(path_to_folder=options["output"], datatype=".tif")
+    for i, tifs in enumerate(file_list):
+        print(tifs)
+        Module("r.in.gdal",
+               input=tifs,
+               output=options["out_name"] + str(i),
+               memory=options["memory"],
+               offset=0,
+               num_digits=0,
+               overwrite=overwrite_bool)
 
 
 if __name__ == "__main__":
     options, flags = parser()
-#   atexit.register(cleanup)
     sys.exit(main(options, flags))
