@@ -26,6 +26,10 @@ In case you have git installed you can install the package as follows:
 
     pip install git+https://github.com/marlinmm/GRASSINEL.git
 
+# Workflow of the GRASSINEL module:
+![GRASSINEL_workflow](GRASSINEL/preview_files/GRASSINEL_workflow.png)
+_GRASSINEL workflow_
+
 # Examples
 Example of created timeseries processed using pyroSAR and created using GRASS GIS time series functionality
 ![S1_time_series_20m](GRASSINEL/preview_files/S1_timeseries_20m_example.gif)
@@ -44,6 +48,8 @@ per scene)_
 ![S1_time_series_date_plot](GRASSINEL/preview_files/time_series_date_plot.png)
 _Point plot of Sen-1 acquisition dates for VV and VH polariazation printed by the "visualize_stc" function_
 
-# Workflow of the module:
-![GRASSINEL_workflow](GRASSINEL/preview_files/GRASSINEL_workflow.png)
-_GRASSINEL workflow_
+<br/>
+
+![GRASSINEL GRASS GIS pyroSAR addon](GRASSINEL/preview_files/GRASSINEL_addon.png)
+_Screenshot of the GRASS addon for pyroSAR processing inside GRASS GISS_
+
