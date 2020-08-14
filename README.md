@@ -2,7 +2,7 @@
 University Project (FSU Jena) by Jonas Ziemer, Marlin M. Mueller and Patrick Fischer
 
 This tool combines [pyroSAR](https://github.com/johntruckenbrodt/pyroSAR) Sentinel-1 preprocessing capabilites with 
-[GRASS GIS](grass.osgeo.org) functionality for Sentinel satellite imagery. 
+[GRASS GIS](grass.osgeo.org) _(Version: 7.9dev)_ functionality for Sentinel satellite imagery. 
 
 It allows for automatic downloading of user-defined Sentinel-1 scenes, pre-processing, subsetting and multitemporal
 operations. Data is handled in GRASS internal formats and all available GRASS operations can be applied
