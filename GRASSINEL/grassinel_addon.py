@@ -117,7 +117,7 @@ def main(options, flags):
             filename = filenames(tifs)
             Module("r.in.gdal",
                    input=tifs,
-                   output=filename + "__processed",
+                   output=filename[0:len(filename)-4] + "__processed.tif",
                    memory=options["memory"],
                    offset=0,
                    num_digits=0,
