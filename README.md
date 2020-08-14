@@ -1,5 +1,5 @@
 # GRASSINEL
-University Project (FSU Jena) by Jonas Ziemer, Marlin M. Mueller and Patrick Fischer
+University Project (FSU Jena) by Patrick Fischer, Marlin M. Mueller and Jonas Ziemer
 
 This tool combines [pyroSAR](https://github.com/johntruckenbrodt/pyroSAR) Sentinel-1 preprocessing capabilites with 
 [GRASS GIS](grass.osgeo.org) _(Version: 7.9dev)_ functionality for Sentinel satellite imagery. 
