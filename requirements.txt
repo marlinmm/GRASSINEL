@@ -2,4 +2,5 @@ pyroSAR
 BanDiTS
 setuptools
 rasterio
+numpy
 fiona

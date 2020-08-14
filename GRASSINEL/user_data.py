@@ -8,7 +8,7 @@ def user_data():
             self-explanatory returns, for acces through the Path classes "GrassData" and "Paths"
     """
     ######## add user data for grass setup ########
-    location_name = "GRASSINEL_test"
+    location_name = "GRASSINEL_test_1000"
     crs = "32632"
     grass_version = "grass79"
 
@@ -31,12 +31,14 @@ def user_data():
     if not os.path.exists(sen_processed_dir):
         os.makedirs(sen_processed_dir)
 
-    return location_name, crs, grass_version, main_dir, grass_dir, sen_down_dir, sen_processed_dir, subset_dir,\
+    return location_name, crs, grass_version, main_dir, grass_dir, sen_down_dir, sen_processed_dir, subset_dir, \
            boundary_shape, ordered_dir
 
 
 class GrassData(object):
     location_name, crs, grass_version = user_data()[0:3]
 
+
 class Paths(object):
-    main_path, grass_path, sen_down_path, sen_processed_path, subset_path, boundary_path, ordered_path = user_data()[3:11]
+    main_path, grass_path, sen_down_path, sen_processed_path, subset_path, boundary_path, ordered_path = \
+        user_data()[3:11]
