@@ -22,7 +22,7 @@ def pyroSAR_processing(down_path, processed_path, target_resolution, target_CRS,
     start_time = datetime.now()
     sentinel_file_list = extract_files_to_list(down_path, datatype=".zip")
     for l, file in enumerate(sentinel_file_list):
-        geocode(infile=file, outdir=processed_path, tr=target_resolution, t_srs=target_CRS,
+        geocode(infile=file, outdir=processed_path, tr=int(target_resolution), t_srs=int(target_CRS),
                 terrainFlattening=terrain_flat_bool, removeS1ThermalNoise=remove_therm_noise_bool)
 
         interval_time = datetime.now()
