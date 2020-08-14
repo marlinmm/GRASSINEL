@@ -17,7 +17,7 @@
 #% description: Preprocessing of downloaded Sentinel-1 Data with pyroSAR (Copyright by John Truckenbrodt)
 #%end
 #%option G_OPT_M_DIR
-#% key: raster
+#% key: input
 #% description: Folder of unprocessed Sentinel-1 Data
 #%end
 #%option G_OPT_M_DIR
@@ -98,7 +98,7 @@ def main(options, flags):
     else:
         noise_bool = False
     # pyroSAR Processing
-    pyroSAR_processing(down_path=options["raster"], processed_path=options["output"], target_resolution=options["res"],
+    pyroSAR_processing(down_path=options["input"], processed_path=options["output"], target_resolution=options["res"],
                        target_CRS=options["crs"], terrain_flat_bool=terr_f_bool,
                        remove_therm_noise_bool=noise_bool)
 
@@ -117,7 +117,7 @@ def main(options, flags):
             filename = filenames(tifs)
             Module("r.in.gdal",
                    input=tifs,
-                   output=filename + "__processed",
+                   output=filename[0:len(filename)-4] + "__processed.tif",
                    memory=options["memory"],
                    offset=0,
                    num_digits=0,

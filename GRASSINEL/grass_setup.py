@@ -1,10 +1,10 @@
 import sys
-from GRASSINEL.support_functions import *
 from GRASSINEL.user_data import *
 from grass_session import get_grass_gisbase
 from grass_session import Session
 import grass.script as gscript
 import grass.script.setup as gsetup
+
 
 def GRASSBIN_import():
     """

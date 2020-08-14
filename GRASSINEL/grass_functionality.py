@@ -238,7 +238,7 @@ def raster_algebra(basename, layername, expression, overwrite_bool):
     :param layername: string
         Name of the formula result, e.g. "result"
     :param expression: string
-        mathematic formula the raster calculation is based on
+        mathematic formula for which the raster calculation is based on
     :param overwrite_bool: bool
         Option of True or False, but True is strongly recommended!
     :return:
@@ -263,6 +263,28 @@ def raster_algebra(basename, layername, expression, overwrite_bool):
                    basename=basename,
                    suffix="num",
                    nprocs=4)
+
+
+def temporal_mapcalc(layername, expression):
+    """
+    calculates user-dependent mapcalc functions on the imported raster scenes
+    :param layername: string
+        Name of the formula result, e.g. "difference"
+    :param expression: string
+        mathematic formula for which the raster calculation is based on
+    """
+    temporal_mapcalc = Module("r.mapcalc")
+    temporal_mapcalc(expression=layername + expression,
+                region="current", overwrite=True)
+
+    temporal_info = Module("r.info")
+    temporal_info(map=layername)
+
+    temporal_statistics = Module("r.univar")
+    temporal_statistics(map=layername)
+
+    mapcalc_visualization = Module("g.gui.animation")
+    mapcalc_visualization(raster=layername)
 
 
 def rvi_mapcalc(layername, overwrite_bool):
@@ -300,6 +322,9 @@ def rvi_mapcalc(layername, overwrite_bool):
         print("---------------------------- RVI Info - Layer " + layername + str(i) + " ----------------------------")
         rvi_info = Module("r.info")
         rvi_info(map=layername + str(i))
+
+        rvi_univar = Module("r.univar")
+        rvi_univar(map=layername + str(i))
 
     rvi_visualization = Module("g.gui.animation")
     rvi_visualization(raster=rvi_list)
