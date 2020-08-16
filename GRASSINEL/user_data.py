@@ -9,7 +9,7 @@ def user_data():
     """
     #################### USER DEFINED INPUT ####################
     # add user data for grass setup
-    location_name = "GRASSINEL_test_1000"
+    location_name = "GRASSINEL_test"
     crs = "32632"
     grass_version = "grass79"
 
